@@ -7,5 +7,6 @@ userRouter.use(authMiddleware);
 
 userRouter.post("/users/create", userController.create);
 userRouter.get("/users/get-user", userController.getUser);
+userRouter.post("/users/update-user", userController.updateUser);
 
 export { userRouter };
