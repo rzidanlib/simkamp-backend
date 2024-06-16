@@ -1,8 +1,9 @@
 import bcyrpt from "bcrypt";
 import {
+  getAllUsers,
   getCurrentUser,
   getTotalUser,
-  getUser,
+  getUserById,
   insertUser,
   updateUser,
 } from "../models/user-model.js";
@@ -48,11 +49,26 @@ const get = async (currentUserId) => {
   return user;
 };
 
-const update = async (currentUserId, data) => {
-  const user = await getUser(currentUserId);
+const getAllUser = async () => {
+  const users = await getAllUsers();
+  return users;
+};
+
+const getUser = async (currentUserId) => {
+  const user = await getUserById(currentUserId);
 
   if (!user) {
-    throw new Error("Username not found");
+    throw new Error("User not found");
+  }
+
+  return user;
+};
+
+const update = async (currentUserId, data) => {
+  const user = await getUserById(currentUserId);
+
+  if (!user) {
+    throw new Error("User not found");
   }
 
   const validateUser = validate(updateUserValidation, data);
@@ -78,5 +94,7 @@ const update = async (currentUserId, data) => {
 export default {
   create,
   get,
+  getUser,
+  getAllUser,
   update,
 };

@@ -36,7 +36,13 @@ export const getTotalUser = async () => {
   return rows[0].total_users;
 };
 
-export const getUser = async (id) => {
+export const getAllUsers = async () => {
+  const query = `SELECT * FROM users`;
+  const { rows } = await db.query(query);
+  return rows;
+};
+
+export const getUserById = async (id) => {
   const query = `SELECT * FROM users WHERE id = $1`;
   const values = [id];
   const { rows } = await db.query(query, values);
