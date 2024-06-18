@@ -26,8 +26,11 @@ const checkUserIsExist = async (userData) => {
 const create = async (request) => {
   const user = validate(createUserValidation, request);
 
-  if (user) {
-    await checkUserIsExist(user.username, user.email);
+  if (user.username) {
+    await checkUserIsExist(user.username);
+  }
+  if (user.email) {
+    await checkUserIsExist(user.email);
   }
 
   const total_users = await getTotalUser();

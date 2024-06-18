@@ -9,6 +9,7 @@ import { authRouter } from "./routes/api/auth-routes.js";
 import { userRouter } from "./routes/api/user-routes.js";
 import { miscRouter } from "./routes/api/misc-routes.js";
 import { publicAPI } from "./routes/publicApi/index.js";
+import { rolesRouter } from "./routes/api/roles-routes.js";
 
 dotenv.config({ path: `${process.cwd()}/.env.development` });
 
@@ -26,6 +27,7 @@ app.use("/api/v1/", miscRouter);
 // Protected Route
 app.use("/api/v1/", authRouter);
 app.use("/api/v1/", userRouter);
+app.use("/api/v1/", rolesRouter);
 
 app.use(errorMiddleware);
 
