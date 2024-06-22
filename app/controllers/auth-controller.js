@@ -10,9 +10,7 @@ const login = async (req, res, next) => {
 
     res.status(200).json({
       message: "Login successful",
-      data: {
-        user: result,
-      },
+      data: result,
     });
   } catch (error) {
     next(error);
@@ -31,4 +29,17 @@ const logout = async (req, res, next) => {
   }
 };
 
-export default { login, logout };
+const getCurrent = async (req, res, next) => {
+  try {
+    const authData = {
+      id: req.userId,
+      role: req.userRole,
+    };
+    const user = await authService.getCurrent(authData);
+    res.status(200).json({ message: "Get current user", data: user });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export default { login, logout, getCurrent };

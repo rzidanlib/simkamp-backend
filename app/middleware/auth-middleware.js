@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import config from "../config/config.js";
-import { getBlacklistToken } from "../models/auth-model.js";
+import authModel from "../models/auth-model.js";
 
 const env = process.env.NODE_ENV || "development";
 const JWT_SECRET = config[env].secretKey;
@@ -28,7 +28,7 @@ export const authMiddleware = async (req, res, next) => {
         .end();
     }
 
-    const isTokenBlacklisted = await getBlacklistToken(token);
+    const isTokenBlacklisted = await authModel.getBlacklistToken(token);
     if (isTokenBlacklisted) {
       return res.status(401).json({ errors: "Token is blacklisted" });
     }
@@ -40,13 +40,14 @@ export const authMiddleware = async (req, res, next) => {
         });
       }
       req.userId = decoded.id;
+      req.userRole = decoded.role;
       next();
     });
   } catch (error) {
     return res
       .status(500)
       .json({
-        errors: "Internal server error",
+        errors: error,
       })
       .end();
   }

@@ -1,10 +1,10 @@
-import rolesModel from "../models/roles-model.js";
-import { validate } from "../validations/validation.js";
-import { ResponseError } from "../error/response-error.js";
+import { validate } from "../../validations/validation.js";
+import { ResponseError } from "../../error/response-error.js";
+import rolesModel from "../../models/admin/roles-model.js";
 import {
   createRoleValidation,
   updateRoleValidation,
-} from "../validations/roles-validations.js";
+} from "../../validations/admin/roles-validations.js";
 
 const create = async (data) => {
   try {
@@ -31,9 +31,9 @@ const get = async (roleId) => {
   }
 };
 
-const getAllRoles = async () => {
+const getAll = async () => {
   try {
-    const roles = await rolesModel.getAllRoles();
+    const roles = await rolesModel.getAll();
     if (!roles) {
       throw new ResponseError(404, "No roles found");
     }
@@ -71,7 +71,7 @@ const remove = async (roleId) => {
 export default {
   create,
   get,
-  getAllRoles,
+  getAll,
   update,
   remove,
 };

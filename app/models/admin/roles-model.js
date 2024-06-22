@@ -1,43 +1,43 @@
-import db from "../config/database-config.js";
-import { ResponseError } from "../error/response-error.js";
+import db from "../../config/database-config.js";
+import { ResponseError } from "../../error/response-error.js";
 
 const create = async (data) => {
   const query = `
-    INSERT INTO roles (role_name, description)
+    INSERT INTO roles (role, role_deskripsi)
     VALUES ($1, $2)
     RETURNING *;
   `;
-  const result = await db.query(query, [data.role_name, data.description]);
+  const result = await db.query(query, [data.role, data.role_deskripsi]);
   return result.rows[0];
 };
 
 const get = async (roleId) => {
   const query = `
     SELECT * FROM roles
-    WHERE id = $1
+    WHERE role_id = $1
   `;
   const result = await db.query(query, [roleId]);
   return result.rows[0];
 };
 
-const getAllRoles = async () => {
+const getAll = async () => {
   const query = `
     SELECT * FROM roles
   `;
-  const result = await db.query(query);
-  return result.rows;
+  const { rows } = await db.query(query);
+  return rows;
 };
 
 const update = async (roleId, data) => {
   const query = `
     UPDATE roles
-    SET role_name = $1, description = $2
-    WHERE id = $3
+    SET role = $1, role_deskripsi = $2
+    WHERE role_id = $3
     RETURNING *;
   `;
   const result = await db.query(query, [
-    data.role_name,
-    data.description,
+    data.role,
+    data.role_deskripsi,
     roleId,
   ]);
   return result.rows[0];
@@ -45,8 +45,8 @@ const update = async (roleId, data) => {
 
 const remove = async (roleId) => {
   const selectQuery = `
-    SELECT role_name FROM roles
-    WHERE id = $1
+    SELECT role FROM roles
+    WHERE role_id = $1
   `;
   const role = await db.query(selectQuery, [roleId]);
 
@@ -56,7 +56,7 @@ const remove = async (roleId) => {
 
   const deleteQuery = `
     DELETE FROM roles
-    WHERE id = $1
+    WHERE role_id = $1
   `;
   await db.query(deleteQuery, [roleId]);
 
@@ -66,7 +66,7 @@ const remove = async (roleId) => {
 export default {
   create,
   get,
-  getAllRoles,
+  getAll,
   update,
   remove,
 };

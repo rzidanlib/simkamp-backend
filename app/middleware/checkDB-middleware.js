@@ -5,7 +5,7 @@ const checkDatabaseConnection = (req, res, next) => {
     if (err) {
       return res.status(500).json({
         message: "Database connection error",
-        error: err.message,
+        error: err,
       });
     }
     next();
