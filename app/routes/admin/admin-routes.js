@@ -37,5 +37,6 @@ adminRoutes.delete("/partai/delete/:partaiId", partaiController.remove);
 adminRoutes.post("/users/create", userController.create);
 adminRoutes.get("/users/get/:userId", userController.get);
 adminRoutes.get("/users/get-all", userController.getAll);
+adminRoutes.put("/users/update", userController.updateCurrent);
 
 export { adminRoutes };

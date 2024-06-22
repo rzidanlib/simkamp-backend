@@ -40,25 +40,18 @@ const getAll = async () => {
   return rows;
 };
 
-const update = async (id, data) => {
+const updateCurrent = async (userId, data) => {
   const query = `
     UPDATE users
-    SET
-      username = $1,
-      email = $2,
-      nama_user = $3,
-      no_hp = $4,
-      password = $5
-    WHERE id = $6
-    RETURNING *;
+    SET user_nama = $1, user_email = $2, user_password = $3, user_no_telp = $4
+    WHERE user_id = $5
   `;
   const values = [
-    data.username,
-    data.email,
-    data.nama_user,
-    data.no_hp,
-    data.password,
-    id,
+    data.user_nama,
+    data.user_email,
+    data.user_password,
+    data.user_no_telp,
+    userId,
   ];
   const result = await db.query(query, values);
   return result.rows[0];
@@ -76,6 +69,6 @@ export default {
   getById,
   getByEmail,
   getAll,
-  update,
+  updateCurrent,
   remove,
 };

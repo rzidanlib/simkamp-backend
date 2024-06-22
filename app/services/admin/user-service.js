@@ -1,7 +1,10 @@
 import bcyrpt from "bcrypt";
 import userModel from "../../models/admin/user-model.js";
 
-import { createUserValidation } from "../../validations/user-validation.js";
+import {
+  createUserValidation,
+  updateUserValidation,
+} from "../../validations/user-validation.js";
 import { validate } from "../../validations/validation.js";
 import { ResponseError } from "../../error/response-error.js";
 
@@ -53,42 +56,38 @@ const getAll = async () => {
   }
 };
 
-// const getUser = async (currentUserId) => {
-//   const user = await getUserById(currentUserId);
+const updateCurrent = async (userId, data) => {
+  try {
+    const user = await userModel.getById(userId);
 
-//   if (!user) {
-//     throw new Error("User not found");
-//   }
+    if (!user) {
+      throw new Error("User not found");
+    }
 
-//   return user;
-// };
+    const validateUser = validate(updateUserValidation, data);
 
-// const update = async (currentUserId, data) => {
-//   const user = await getUserById(currentUserId);
+    console.log("validate user", validateUser);
+    console.log("user", user);
 
-//   if (!user) {
-//     throw new Error("User not found");
-//   }
+    if (validateUser.user_email !== user.user_email) {
+      await checkUserIsExist(validateUser.user_email);
+    }
 
-//   const validateUser = validate(updateUserValidation, data);
+    if (validateUser.user_password) {
+      validateUser.user_password = await bcyrpt.hash(
+        validateUser.user_password,
+        10
+      );
+    } else {
+      validateUser.user_password = user.user_password;
+    }
 
-//   if (validateUser.username !== user.username) {
-//     await checkUserIsExist(validateUser.username);
-//   }
-//   if (validateUser.email !== user.email) {
-//     await checkUserIsExist(validateUser.email);
-//   }
-
-//   if (validateUser.password) {
-//     validateUser.password = await bcyrpt.hash(validateUser.password, 10);
-//   } else {
-//     validateUser.password = user.password;
-//   }
-
-//   const updatedUser = await updateUser(currentUserId, validateUser);
-
-//   return updatedUser;
-// };
+    const updatedUser = await userModel.updateCurrent(userId, validateUser);
+    return updatedUser;
+  } catch (error) {
+    throw new ResponseError(500, error.message);
+  }
+};
 
 // const remove = async (userId) => {
 //   const user = await getUserById(userId);
@@ -106,7 +105,6 @@ export default {
   create,
   get,
   getAll,
-  // getUser,
-  // update,
+  updateCurrent,
   // remove,
 };

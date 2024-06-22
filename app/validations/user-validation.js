@@ -10,12 +10,10 @@ const createUserValidation = Joi.object({
 });
 
 const updateUserValidation = Joi.object({
-  username: Joi.string().max(100),
-  email: Joi.string().max(100),
-  password: Joi.string().max(100).allow(""),
-  nama_user: Joi.string().max(100),
-  no_hp: Joi.string().max(15),
-  partai: Joi.string().max(100).allow(""),
+  user_nama: Joi.string().max(100),
+  user_email: Joi.string().max(100),
+  user_password: Joi.string().max(100).min(8).allow(""),
+  user_no_telp: Joi.string().max(15),
 });
 
 export { createUserValidation, updateUserValidation };

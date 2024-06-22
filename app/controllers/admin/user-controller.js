@@ -30,12 +30,12 @@ const get = async (req, res, next) => {
   }
 };
 
-const update = async (req, res, next) => {
+const updateCurrent = async (req, res, next) => {
   try {
     const currentUserId = req.userId;
-    const user = await userService.update(currentUserId, req.body);
+    const user = await userService.updateCurrent(currentUserId, req.body);
 
-    res.status(200).json({ message: "Update user", data: { user } });
+    res.status(200).json({ message: "Update user", data: user });
   } catch (error) {
     next(error);
   }
@@ -55,6 +55,6 @@ export default {
   create,
   get,
   getAll,
-  update,
+  updateCurrent,
   remove,
 };
