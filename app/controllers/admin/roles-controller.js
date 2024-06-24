@@ -1,4 +1,4 @@
-import rolesService from "../services/admin/roles-service.js";
+import rolesService from "../../services/admin/roles-service.js";
 
 const create = async (req, res, next) => {
   try {

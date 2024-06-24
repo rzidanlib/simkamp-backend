@@ -9,9 +9,8 @@ import { errorMiddleware } from "./middleware/error-middleware.js";
 import { authRouter } from "./routes/api/auth-routes.js";
 import { miscRouter } from "./routes/api/misc-routes.js";
 import { publicAPI } from "./routes/publicApi/index.js";
-// import { rolesRouter } from "./routes/api/roles-routes.js";
-// import { partaiRoutes } from "./routes/api/partai-routes.js";
 import { adminRoutes } from "./routes/admin/admin-routes.js";
+import { relawanRoutes } from "./routes/api/relawan-routes.js";
 
 dotenv.config({ path: `${process.cwd()}/.env.development` });
 
@@ -32,7 +31,7 @@ app.use("/api/v1/", miscRouter);
 
 // Protected Route
 app.use("/api/v1/", adminRoutes);
-// app.use("/api/v1/", rolesRouter);
+app.use("/api/v1/", relawanRoutes);
 // app.use("/api/v1/", partaiRoutes);
 app.use("/api/v1/", authRouter);
 

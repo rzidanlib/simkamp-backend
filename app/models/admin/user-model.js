@@ -58,7 +58,7 @@ const updateCurrent = async (userId, data) => {
 };
 
 const remove = async (id) => {
-  const query = `UPDATE users SET is_delete = true WHERE id = $1 RETURNING *;`;
+  const query = `DELETE FROM users WHERE user_id = $1 RETURNING *`;
   const values = [id];
   const result = await db.query(query, values);
   return result.rows[0];

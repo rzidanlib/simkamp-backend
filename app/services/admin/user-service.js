@@ -4,7 +4,7 @@ import userModel from "../../models/admin/user-model.js";
 import {
   createUserValidation,
   updateUserValidation,
-} from "../../validations/user-validation.js";
+} from "../../validations/admin/user-validation.js";
 import { validate } from "../../validations/validation.js";
 import { ResponseError } from "../../error/response-error.js";
 
@@ -66,9 +66,6 @@ const updateCurrent = async (userId, data) => {
 
     const validateUser = validate(updateUserValidation, data);
 
-    console.log("validate user", validateUser);
-    console.log("user", user);
-
     if (validateUser.user_email !== user.user_email) {
       await checkUserIsExist(validateUser.user_email);
     }
@@ -89,22 +86,25 @@ const updateCurrent = async (userId, data) => {
   }
 };
 
-// const remove = async (userId) => {
-//   const user = await getUserById(userId);
+const remove = async (userId) => {
+  try {
+    const user = await userModel.getById(userId);
 
-//   if (!user) {
-//     throw new ResponseError(404, "User not found");
-//   }
+    if (!user) {
+      throw new ResponseError(404, "User not found");
+    }
 
-//   const userDelete = await deleteUser(userId);
-
-//   return userDelete;
-// };
+    const deletedUser = await userModel.remove(userId);
+    return deletedUser;
+  } catch (error) {
+    throw new ResponseError(500, error.message);
+  }
+};
 
 export default {
   create,
   get,
   getAll,
   updateCurrent,
-  // remove,
+  remove,
 };

@@ -45,7 +45,7 @@ const remove = async (req, res, next) => {
   try {
     const userId = req.params.userId;
     const user = await userService.remove(userId);
-    res.status(200).json({ message: "User Berhasil Di hapus", data: { user } });
+    res.status(200).json({ message: "User Berhasil Di hapus", data: user });
   } catch (error) {
     next(error);
   }

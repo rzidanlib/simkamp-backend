@@ -29,6 +29,61 @@ function generateToken(user) {
   });
 }
 
+const fetchAndFormatUserData = async (fetchFunction, email, id, rolePrefix) => {
+  const entity = await fetchFunction(email || id);
+  if (!entity) {
+    throw new Error(`${rolePrefix} not found`);
+  }
+
+  return !id
+    ? {
+        id: entity[`${rolePrefix}_id`],
+        name: entity[`${rolePrefix}_nama`],
+        email: entity[`${rolePrefix}_email`],
+        password: entity[`${rolePrefix}_password`],
+        role: entity.role,
+      }
+    : entity;
+};
+
+const loginByRole = async (data) => {
+  const { role, email, id } = data;
+  const roleToFunction = {
+    "admin-partai": () => authModel.getUserAdmin(email || id, "user"),
+    administrator: () => authModel.getUserAdmin(email || id, "user"),
+    kandidat: () => authModel.getKandidat(email || id, "kandidat"),
+  };
+
+  const fetchFunction = roleToFunction[role];
+  if (!fetchFunction) {
+    console.error("Invalid role");
+    return null;
+  }
+
+  try {
+    const loginData = await fetchAndFormatUserData(
+      fetchFunction,
+      email,
+      id,
+      role === "kandidat" ? "kandidat" : "user"
+    );
+    return loginData;
+  } catch (error) {
+    console.error("Login error:", error.message);
+    return null;
+  }
+};
+
+const getCurrent = async (authData) => {
+  const user = await loginByRole(authData);
+
+  if (!user) {
+    throw new ResponseError(404, "User not found");
+  }
+
+  return user;
+};
+
 const login = async (request) => {
   const validateUser = validate(loginValidation, request);
   const user = await validateUserCredentials(validateUser);
@@ -56,58 +111,6 @@ const login = async (request) => {
     },
     accessToken: token,
   };
-};
-
-const loginByRole = async (data) => {
-  const { role, email, id } = data;
-  let loginData = {};
-
-  if (role === "admin-partai" || role === "administrator") {
-    try {
-      const user = await authModel.getUserAdmin(email || id);
-      if (!user) {
-        throw new Error("User not found");
-      }
-
-      if (!id) {
-        loginData = {
-          id: user.user_id,
-          name: user.user_nama,
-          email: user.user_email,
-          password: user.user_password,
-          role: user.role,
-        };
-      } else {
-        loginData = user;
-      }
-    } catch (error) {
-      console.error("Login error:", error.message);
-      return null;
-    }
-  }
-
-  if (data.role === "kandidat") {
-    const user = await getKandidatByUsernameOrEmail(
-      data.username || data.email
-    );
-
-    loginData = {
-      id: user.user_id,
-      email: user.email,
-    };
-  }
-
-  return loginData;
-};
-
-const getCurrent = async (authData) => {
-  const user = await loginByRole(authData);
-
-  if (!user) {
-    throw new ResponseError(404, "User not found");
-  }
-
-  return user;
 };
 
 const logout = async (token, expiry) => {
