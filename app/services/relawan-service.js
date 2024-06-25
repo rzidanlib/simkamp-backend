@@ -95,14 +95,14 @@ const update = async (relawanId, data) => {
       validateRelawan.relawan_password = relawan.relawan_password;
     }
 
-    if (validateRelawan.relawan_foto) {
-      const oldFilePath = path.join(`public/${relawan.relawan_foto}`);
+    if (relawan.relawan_foto && validateRelawan.relawan_foto) {
+      const oldFoto = path.join(`public/${relawan.relawan_foto}`);
       try {
-        await fs.promises.access(oldFilePath); // Memeriksa apakah file ada
-        await fs.promises.unlink(oldFilePath); // Menghapus file secara asynchronous
+        await fs.promises.access(oldFoto);
+        await fs.promises.unlink(oldFoto);
       } catch (error) {
-        // Jika file tidak ditemukan atau terjadi error lain, bisa dihandle di sini
-        console.error("Error deleting old relawan photo:", error.message);
+        console.log("Error deleting old foto", error.message);
+        throw new ResponseError(500, error.message);
       }
     }
 
@@ -124,7 +124,16 @@ const remove = async (relawanId) => {
       throw new ResponseError(404, "Relawan not found");
     }
 
-    await fs.unlinkSync(path.join(`public/${relawan.relawan_foto}`));
+    if (relawan.relawan_foto) {
+      const oldFoto = path.join(`public/${relawan.relawan_foto}`);
+      try {
+        await fs.promises.access(oldFoto);
+        await fs.promises.unlink(oldFoto);
+      } catch (error) {
+        console.log("Error deleting old foto", error.message);
+        throw new ResponseError(500, error.message);
+      }
+    }
 
     const deletedRelawan = await relawanModel.remove(relawanId);
     return deletedRelawan;
