@@ -59,7 +59,7 @@ const getByRelawanId = async (relawanId) => {
 const update = async (pemakaianId, data) => {
   const query = `
     UPDATE pemakaian_logistik
-    SET pemakaian_tanggal = $1, pemakaian_jumlah = $2, pemakaian_logistik_id = $3,
+    SET pemakaian_tanggal = $1, pemakaian_jumlah = $2, pemakaian_logistik_id = $3
     WHERE pemakaian_id = $4
     RETURNING *;
   `;
