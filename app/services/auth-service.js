@@ -49,15 +49,15 @@ const fetchAndFormatUserData = async (fetchFunction, email, id, rolePrefix) => {
 const loginByRole = async (data) => {
   const { role, email, id } = data;
   const roleToFunction = {
-    "admin-partai": () => authModel.getUserAdmin(email || id, "user"),
-    administrator: () => authModel.getUserAdmin(email || id, "user"),
-    kandidat: () => authModel.getKandidat(email || id, "kandidat"),
+    "admin-partai": () => authModel.getUserAdmin(email, id),
+    administrator: () => authModel.getUserAdmin(email, id),
+    kandidat: () => authModel.getKandidat(email, id),
+    relawan: () => authModel.getRelawan(email, id),
   };
 
   const fetchFunction = roleToFunction[role];
   if (!fetchFunction) {
-    console.error("Invalid role");
-    return null;
+    throw new Error("Invalid role provided");
   }
 
   try {
@@ -65,12 +65,12 @@ const loginByRole = async (data) => {
       fetchFunction,
       email,
       id,
-      role === "kandidat" ? "kandidat" : "user"
-    );
+      role
+    ); // Correctly pass the entity.
     return loginData;
   } catch (error) {
     console.error("Login error:", error.message);
-    return null;
+    throw error;
   }
 };
 

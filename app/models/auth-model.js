@@ -35,8 +35,6 @@ const getUserAdmin = async (value) => {
 };
 
 const getKandidat = async (value) => {
-  console.log(value);
-  // Validate and sanitize the column name
   const column = !isNaN(value) ? "kandidat_id" : "kandidat_email";
   const validColumns = ["kandidat_id", "kandidat_email"];
   if (!validColumns.includes(column)) {
@@ -79,10 +77,40 @@ const getKandidat = async (value) => {
 };
 
 const getRelawan = async (value) => {
-  const query = "SELECT * FROM relawan WHERE OR relawan_email = $1";
+  const column = !isNaN(value) ? "relawan_id" : "relawan_email";
+  const validColumns = ["relawan_id", "relawan_email"];
+  if (!validColumns.includes(column)) {
+    throw new Error("Invalid column name");
+  }
+
+  let query = `
+    SELECT re.*`;
+
+  if (column === "relawan_email") {
+    query += `,
+      r.role 
+    FROM relawan re 
+    LEFT JOIN roles r ON re.relawan_role_id = r.role_id `;
+  } else {
+    query += `,
+      k.kandidat_nama, r.role 
+    FROM relawan re 
+    LEFT JOIN kandidat k ON re.relawan_kandidat_id = k.kandidat_id
+    LEFT JOIN roles r ON re.relawan_role_id = r.role_id `;
+  }
+
+  // Append the WHERE clause based on the column
+  query += `WHERE re.${column} = $1`;
+
   const values = [value];
-  const { rows } = await db.query(query, values);
-  return rows[0];
+
+  try {
+    const { rows } = await db.query(query, values);
+    return rows[0]; // Return the first user found
+  } catch (error) {
+    console.error("Error fetching relawan:", error);
+    throw error; // Rethrow or handle as needed
+  }
 };
 
 const insertBlacklistToken = async (token, expiry) => {

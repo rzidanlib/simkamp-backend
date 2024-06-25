@@ -6,19 +6,14 @@ import { upload } from "../../middleware/multer-middleware.js";
 const relawanRoutes = new express.Router();
 relawanRoutes.use(authMiddleware);
 
-relawanRoutes.get(
-  "/relawan/get-by-kandidat",
-  relawanController.getByKandidatId
-);
-relawanRoutes.get(
-  "/relawan/get-by-kandidat/:id",
-  relawanController.getByKandidatId
-);
-
 relawanRoutes.post(
   "/relawan/create",
   upload.single("relawan_foto"),
   relawanController.create
+);
+relawanRoutes.get(
+  "/relawan/get-by-kandidat/:id?",
+  relawanController.getByKandidatId
 );
 relawanRoutes.get("/relawan/get/:id", relawanController.get);
 relawanRoutes.get("/relawan/get-all", relawanController.getAll);
