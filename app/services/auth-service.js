@@ -35,24 +35,32 @@ const fetchAndFormatUserData = async (fetchFunction, email, id, rolePrefix) => {
     throw new Error(`${rolePrefix} not found`);
   }
 
+  let prefix;
+  if (rolePrefix === "admin-partai" || rolePrefix === "administrator") {
+    prefix = "user";
+  } else {
+    prefix = rolePrefix;
+  }
+
   return !id
     ? {
-        id: entity[`${rolePrefix}_id`],
-        name: entity[`${rolePrefix}_nama`],
-        email: entity[`${rolePrefix}_email`],
-        password: entity[`${rolePrefix}_password`],
+        id: entity[`${prefix}_id`],
+        name: entity[`${prefix}_nama`],
+        email: entity[`${prefix}_email`],
+        password: entity[`${prefix}_password`],
         role: entity.role,
       }
     : entity;
 };
 
 const loginByRole = async (data) => {
+  console.log(data);
   const { role, email, id } = data;
   const roleToFunction = {
-    "admin-partai": () => authModel.getUserAdmin(email, id),
-    administrator: () => authModel.getUserAdmin(email, id),
-    kandidat: () => authModel.getKandidat(email, id),
-    relawan: () => authModel.getRelawan(email, id),
+    "admin-partai": () => authModel.getUserAdmin(email || id),
+    administrator: () => authModel.getUserAdmin(email || id),
+    kandidat: () => authModel.getKandidat(email || id),
+    relawan: () => authModel.getRelawan(email || id),
   };
 
   const fetchFunction = roleToFunction[role];
@@ -66,7 +74,7 @@ const loginByRole = async (data) => {
       email,
       id,
       role
-    ); // Correctly pass the entity.
+    );
     return loginData;
   } catch (error) {
     console.error("Login error:", error.message);

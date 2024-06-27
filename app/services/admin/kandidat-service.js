@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import fs from "fs";
 import path from "path";
 import kandidatModel from "../../models/admin/kandidat-model.js";
+import userModel from "../../models/admin/user-model.js";
 
 import { validate } from "../../validations/validation.js";
 import { ResponseError } from "../../error/response-error.js";
@@ -19,6 +20,7 @@ const checkKandidatIsExist = async (email) => {
 
 const create = async (adminId, request) => {
   try {
+    const adminData = await userModel.getById(adminId);
     const kandidat = validate(createKandidatValidations, request);
 
     if (kandidat.kandidat_email) {
@@ -29,7 +31,9 @@ const create = async (adminId, request) => {
       kandidat.kandidat_password,
       10
     );
+    kandidat.kandidat_partai_id = adminData.user_partai_id;
     kandidat.kandidat_admin_id = adminId;
+
     const createKandidat = await kandidatModel.create(kandidat);
 
     return createKandidat;
