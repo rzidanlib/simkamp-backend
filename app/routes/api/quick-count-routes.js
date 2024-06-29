@@ -15,6 +15,10 @@ quickCountRoutes.get(
   "/quick-count/get-by-relawan/:id?",
   quickCountController.getByRelawanId
 );
+quickCountRoutes.get(
+  "/quick-count/get-by-kandidat/:id?",
+  quickCountController.getByKandidatId
+);
 quickCountRoutes.get("/quick-count/get/:id", quickCountController.get);
 quickCountRoutes.get("/quick-count/get-all", quickCountController.getAll);
 quickCountRoutes.put(

@@ -11,7 +11,7 @@ const executeQuery = async (query, values = []) => {
 };
 
 const queryGetAllDataRelawan = `
-  SELECT r.*, k.kandidat_nama, rl.role
+  SELECT r.*, k.kandidat_nama, k.kandidat_id, rl.role
     FROM relawan r
     JOIN kandidat k ON r.relawan_kandidat_id = k.kandidat_id
     JOIN roles rl ON r.relawan_role_id = rl.role_id
@@ -55,6 +55,22 @@ const getByKandidatId = async (kandidatId) => {
   const query = `${queryGetAllDataRelawan} WHERE relawan_kandidat_id = $1`;
   try {
     const { rows } = await db.query(query, [kandidatId]);
+    return rows;
+  } catch (error) {
+    console.error("Error fetching all relawan:", error);
+    throw error;
+  }
+};
+
+const getByAdminId = async (adminId) => {
+  const query = `
+  SELECT r.*
+    FROM relawan r
+    JOIN kandidat k ON r.relawan_kandidat_id = k.kandidat_id
+    JOIN users u ON k.kandidat_admin_id = u.user_id
+    WHERE u.user_id = $1`;
+  try {
+    const { rows } = await db.query(query, [adminId]);
     return rows;
   } catch (error) {
     console.error("Error fetching all relawan:", error);
@@ -106,6 +122,7 @@ export default {
   create,
   get,
   getByEmail,
+  getByAdminId,
   getByKandidatId,
   getAll,
   update,

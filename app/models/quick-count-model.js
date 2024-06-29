@@ -63,6 +63,41 @@ const getByRelawanId = async (relawanId) => {
   }
 };
 
+const getByKandidatId = async (kandidatId) => {
+  const query = `
+    SELECT qc.*
+    FROM quick_count qc
+    JOIN relawan r ON qc.quick_count_relawan_id = r.relawan_id
+    JOIN kandidat k ON r.relawan_kandidat_id = k.kandidat_id
+    WHERE k.kandidat_id = $1
+  `;
+  try {
+    const { rows } = await db.query(query, [kandidatId]);
+    return rows;
+  } catch (error) {
+    console.error("Error fetching quick counts by kandidat id:", error);
+    throw error;
+  }
+};
+
+const getByAdminId = async (adminId) => {
+  const query = `
+    SELECT qc.*
+    FROM quick_count qc
+    JOIN relawan r ON qc.quick_count_relawan_id = r.relawan_id
+    JOIN kandidat k ON r.relawan_kandidat_id = k.kandidat_id
+    JOIN users u ON k.kandidat_admin_id = u.user_id
+    WHERE u.user_id = $1
+  `;
+  try {
+    const { rows } = await db.query(query, [adminId]);
+    return rows;
+  } catch (error) {
+    console.error("Error fetching quick counts by admin id:", error);
+    throw error;
+  }
+};
+
 const update = async (quickCountId, data) => {
   const query = `
     UPDATE quick_count
@@ -92,6 +127,8 @@ export default {
   create,
   get,
   getAll,
+  getByAdminId,
+  getByKandidatId,
   getByRelawanId,
   update,
   remove,

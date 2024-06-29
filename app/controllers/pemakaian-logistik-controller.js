@@ -61,6 +61,36 @@ const getByRelawanId = async (req, res, next) => {
   }
 };
 
+const getByKandidatId = async (req, res, next) => {
+  try {
+    const pemakaianLogistik = await pemakaianLogistikService.getByKandidatId(
+      req.userId
+    );
+    res.status(200).json({
+      message:
+        "Berhasil mendapatkan data pemakaian logistik berdasarkan ID kandidat",
+      data: pemakaianLogistik,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getByAdminId = async (req, res, next) => {
+  try {
+    const pemakaianLogistik = await pemakaianLogistikService.getByAdminId(
+      req.userId
+    );
+    res.status(200).json({
+      message:
+        "Berhasil mendapatkan data pemakaian logistik berdasarkan ID admin",
+      data: pemakaianLogistik,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const update = async (req, res, next) => {
   try {
     const pemakaianLogistikId = req.params.id;
@@ -92,4 +122,13 @@ const remove = async (req, res, next) => {
   }
 };
 
-export default { create, getAll, get, getByRelawanId, update, remove };
+export default {
+  create,
+  getAll,
+  get,
+  getByKandidatId,
+  getByAdminId,
+  getByRelawanId,
+  update,
+  remove,
+};

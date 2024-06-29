@@ -106,6 +106,8 @@ const update = async (kandidatId, data) => {
       await fs.unlinkSync(path.join(`public/${kandidat.kandidat_foto}`));
     }
 
+    validateKandidat.kandidat_partai_id = kandidat.kandidat_partai_id;
+
     const updatedKandidat = await kandidatModel.update(
       kandidatId,
       validateKandidat

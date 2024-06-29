@@ -49,6 +49,24 @@ const getByRelawanId = async (relawanId) => {
   }
 };
 
+const getByKandidatId = async (kandidatId) => {
+  try {
+    const logistik = await logistikModel.getByKandidatId(kandidatId);
+    return logistik;
+  } catch (error) {
+    throw new ResponseError(500, error.message);
+  }
+};
+
+const getByAdminId = async (adminId) => {
+  try {
+    const logistik = await logistikModel.getByAdminId(adminId);
+    return logistik;
+  } catch (error) {
+    throw new ResponseError(500, error.message);
+  }
+};
+
 const update = async (id, data) => {
   try {
     const logistik = validate(updateLogistikValidations, data);
@@ -84,6 +102,8 @@ export default {
   get,
   getAll,
   getByRelawanId,
+  getByKandidatId,
+  getByAdminId,
   update,
   remove,
 };

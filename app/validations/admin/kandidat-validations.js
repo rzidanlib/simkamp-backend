@@ -20,7 +20,7 @@ const createKandidatValidations = Joi.object({
 const updateKandidatValidations = Joi.object({
   kandidat_nama: Joi.string().max(100),
   kandidat_email: Joi.string().email(),
-  kandidat_password: Joi.string().min(8),
+  kandidat_password: Joi.string().min(8).allow(""),
   kandidat_no_telp: Joi.string().max(15),
   kandidat_agama_id: Joi.number(),
   kandidat_foto: Joi.string(),

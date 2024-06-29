@@ -13,6 +13,11 @@ import jenisPemilihanController from "../../controllers/admin/jenis-pemilihan-co
 import posisiCalonTetapController from "../../controllers/admin/posisi-calon-tetap-controller.js";
 import kandidatController from "../../controllers/admin/kandidat-controller.js";
 import relawanController from "../../controllers/relawan-controller.js";
+import calonPemilihController from "../../controllers/calon-pemilih-controller.js";
+import arusKasController from "../../controllers/arus-kas-controller.js";
+import logistikController from "../../controllers/logistik-controller.js";
+import pemakaianLogistikController from "../../controllers/pemakaian-logistik-controller.js";
+import quickCountController from "../../controllers/quick-count-controller.js";
 
 const adminRoutes = new express.Router();
 adminRoutes.use(authMiddleware);
@@ -113,6 +118,28 @@ adminRoutes.put(
 adminRoutes.delete("/kandidat/delete/:id", kandidatController.remove);
 
 // Relawan Routes
-adminRoutes.get("/relawan/get-by-admin/:id", relawanController.getByKandidatId);
+adminRoutes.get("/relawan/get-by-admin/:id?", relawanController.getByAdminId);
+// Calon Pemilih Routes
+adminRoutes.get(
+  "/calon-pemilih/get-by-admin/:id?",
+  calonPemilihController.getByAdminId
+);
+// Arus Kas Routes
+adminRoutes.get(
+  "/aruskas/get-by-admin/:id?",
+  arusKasController.getArusKasByAdminId
+);
+// Logistik Routes
+adminRoutes.get("/logistik/get-by-admin/:id?", logistikController.getByAdminId);
+// Pemakaian Logistik Routes
+adminRoutes.get(
+  "/pemakaian-logistik/get-by-admin/:id?",
+  pemakaianLogistikController.getByAdminId
+);
+// Quick Count Routes
+adminRoutes.get(
+  "/quick-count/get-by-admin/:id?",
+  quickCountController.getByAdminId
+);
 
 export { adminRoutes };

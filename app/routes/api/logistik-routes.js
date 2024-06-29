@@ -12,6 +12,10 @@ logistikRoutes.get(
   "/logistik/get-by-relawan/:id?",
   logistikController.getByRelawanId
 );
+logistikRoutes.get(
+  "/logistik/get-by-kandidat/:id?",
+  logistikController.getByKandidatId
+);
 logistikRoutes.put("/logistik/update/:id", logistikController.update);
 logistikRoutes.delete("/logistik/delete/:id", logistikController.remove);
 

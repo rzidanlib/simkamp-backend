@@ -21,6 +21,10 @@ pemakaianLogistikRoutes.get(
   "/pemakaian-logistik/get-by-relawan/:id?",
   pemakaianLogistikController.getByRelawanId
 );
+pemakaianLogistikRoutes.get(
+  "/pemakaian-logistik/get-by-kandidat/:id?",
+  pemakaianLogistikController.getByKandidatId
+);
 pemakaianLogistikRoutes.put(
   "/pemakaian-logistik/update/:id",
   pemakaianLogistikController.update

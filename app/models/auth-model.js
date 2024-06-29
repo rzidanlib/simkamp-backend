@@ -11,7 +11,11 @@ const getUserAdmin = async (value) => {
 
   // Construct the query with conditional JOIN for 'partai'
   let query = `
-    SELECT u.*, r.role, CASE WHEN r.role <> 'administrator' THEN p.partai_label ELSE NULL END AS partai_label
+    SELECT u.*, r.role, 
+      CASE 
+        WHEN r.role <> 'administrator' THEN p.partai_label 
+        ELSE NULL 
+      END AS partai_label
     FROM users u
     JOIN roles r ON u.user_role_id = r.role_id
     LEFT JOIN partai p ON u.user_partai_id = p.partai_id AND r.role <> 'administrator'

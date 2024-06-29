@@ -51,6 +51,24 @@ const getByRelawanId = async (relawanId) => {
   }
 };
 
+const getArusKasByKandidatId = async (kandidatId) => {
+  try {
+    const arusKas = await arusKasModel.getArusKasByKandidatId(kandidatId);
+    return arusKas;
+  } catch (error) {
+    throw new ResponseError(500, error.message);
+  }
+};
+
+const getArusKasByAdminId = async (adminId) => {
+  try {
+    const arusKas = await arusKasModel.getArusKasByAdminId(adminId);
+    return arusKas;
+  } catch (error) {
+    throw new ResponseError(500, error.message);
+  }
+};
+
 const update = async (id, data) => {
   try {
     const arusKas = validate(updateArusKasValidations, data);
@@ -113,6 +131,8 @@ export default {
   get,
   getAll,
   getByRelawanId,
+  getArusKasByKandidatId,
+  getArusKasByAdminId,
   update,
   remove,
 };

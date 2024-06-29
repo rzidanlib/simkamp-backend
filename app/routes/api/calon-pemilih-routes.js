@@ -18,6 +18,10 @@ calonPemilihRoutes.get(
   "/calon-pemilih/get-by-relawan/:id?",
   calonPemilihController.getByRelawanId
 );
+calonPemilihRoutes.get(
+  "/calon-pemilih/get-by-kandidat/:id?",
+  calonPemilihController.getByKandidatId
+);
 calonPemilihRoutes.get("/calon-pemilih/get/:id", calonPemilihController.get);
 calonPemilihRoutes.get("/calon-pemilih/get-all", calonPemilihController.getAll);
 calonPemilihRoutes.put(

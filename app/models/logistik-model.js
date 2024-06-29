@@ -60,6 +60,41 @@ const getByRelawanId = async (relawanId) => {
   }
 };
 
+const getByKandidatId = async (kandidatId) => {
+  const query = `
+    SELECT lg.*
+    FROM logistik lg
+    JOIN relawan re ON lg.logistik_relawan_id = re.relawan_id
+    JOIN kandidat k ON re.relawan_kandidat_id = k.kandidat_id
+    WHERE k.kandidat_id = $1
+  `;
+  try {
+    const { rows } = await db.query(query, [kandidatId]);
+    return rows;
+  } catch (error) {
+    console.error("Error fetching logistik by kandidat id:", error);
+    throw error;
+  }
+};
+
+const getByAdminId = async (adminId) => {
+  const query = `
+    SELECT lg.*
+    FROM logistik lg
+    JOIN relawan re ON lg.logistik_relawan_id = re.relawan_id
+    JOIN kandidat k ON re.relawan_kandidat_id = k.kandidat_id
+    JOIN users u ON k.kandidat_admin_id = u.user_id
+    WHERE u.user_id = $1
+  `;
+  try {
+    const { rows } = await db.query(query, [adminId]);
+    return rows;
+  } catch (error) {
+    console.error("Error fetching logistik by admin id:", error);
+    throw error;
+  }
+};
+
 const update = async (logistikId, data) => {
   const query = `
     UPDATE logistik
@@ -87,6 +122,8 @@ export default {
   get,
   getAll,
   getByRelawanId,
+  getByKandidatId,
+  getByAdminId,
   update,
   remove,
 };

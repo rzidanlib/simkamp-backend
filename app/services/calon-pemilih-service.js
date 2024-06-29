@@ -54,6 +54,24 @@ const getByRelawanId = async (relawanId) => {
   }
 };
 
+const getByKandidatId = async (kandidatId) => {
+  try {
+    const calonPemilih = await calonPemilihModel.getByKandidatId(kandidatId);
+    return calonPemilih;
+  } catch (error) {
+    throw new ResponseError(500, error.message);
+  }
+};
+
+const getByAdminId = async (adminId) => {
+  try {
+    const calonPemilih = await calonPemilihModel.getByAdminId(adminId);
+    return calonPemilih;
+  } catch (error) {
+    throw new ResponseError(500, error.message);
+  }
+};
+
 const update = async (id, data) => {
   try {
     const calonPemilih = validate(updateCalonPemilihValidations, data);
@@ -149,6 +167,8 @@ export default {
   create,
   get,
   getAll,
+  getByKandidatId,
+  getByAdminId,
   getByRelawanId,
   update,
   remove,

@@ -56,6 +56,28 @@ const getByRelawanId = async (relawanId) => {
   }
 };
 
+const getByKandidatId = async (kandidatId) => {
+  try {
+    const pemakaianLogistik = await pemakaianLogistikModel.getByKandidatId(
+      kandidatId
+    );
+    return pemakaianLogistik;
+  } catch (error) {
+    throw new ResponseError(500, error.message);
+  }
+};
+
+const getByAdminId = async (adminId) => {
+  try {
+    const pemakaianLogistik = await pemakaianLogistikModel.getByAdminId(
+      adminId
+    );
+    return pemakaianLogistik;
+  } catch (error) {
+    throw new ResponseError(500, error.message);
+  }
+};
+
 const update = async (id, data) => {
   try {
     const pemakaianLogistik = validate(
@@ -97,6 +119,8 @@ export default {
   get,
   getAll,
   getByRelawanId,
+  getByKandidatId,
+  getByAdminId,
   update,
   remove,
 };

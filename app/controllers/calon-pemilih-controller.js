@@ -68,6 +68,32 @@ const getByRelawanId = async (req, res, next) => {
   }
 };
 
+const getByKandidatId = async (req, res, next) => {
+  try {
+    const kandidatId = req.userId;
+    const calonPemilih = await calonPemilihService.getByKandidatId(kandidatId);
+    res.status(200).json({
+      message: "Berhasil mendapatkan data calon pemilih",
+      data: calonPemilih,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getByAdminId = async (req, res, next) => {
+  try {
+    const adminId = req.userId;
+    const calonPemilih = await calonPemilihService.getByAdminId(adminId);
+    res.status(200).json({
+      message: "Berhasil mendapatkan data calon pemilih",
+      data: calonPemilih,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const update = async (req, res, next) => {
   try {
     const calonPemilihId = req.params.id;
@@ -104,4 +130,13 @@ const remove = async (req, res, next) => {
   }
 };
 
-export default { create, getAll, get, getByRelawanId, update, remove };
+export default {
+  create,
+  getAll,
+  get,
+  getByRelawanId,
+  getByKandidatId,
+  getByAdminId,
+  update,
+  remove,
+};

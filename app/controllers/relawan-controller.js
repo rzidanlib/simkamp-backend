@@ -34,6 +34,18 @@ const getAll = async (req, res, next) => {
   }
 };
 
+const getByAdminId = async (req, res, next) => {
+  try {
+    const relawans = await relawanService.getByAdminId(req.userId);
+    res.status(200).json({
+      message: "Berhasil mendapatkan semua data relawan",
+      data: relawans,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const getByKandidatId = async (req, res, next) => {
   try {
     let kandidatId = "";
@@ -97,4 +109,12 @@ const remove = async (req, res, next) => {
   }
 };
 
-export default { create, getAll, getByKandidatId, get, update, remove };
+export default {
+  create,
+  getAll,
+  getByAdminId,
+  getByKandidatId,
+  get,
+  update,
+  remove,
+};

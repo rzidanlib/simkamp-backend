@@ -54,7 +54,6 @@ const fetchAndFormatUserData = async (fetchFunction, email, id, rolePrefix) => {
 };
 
 const loginByRole = async (data) => {
-  console.log(data);
   const { role, email, id } = data;
   const roleToFunction = {
     "admin-partai": () => authModel.getUserAdmin(email || id),

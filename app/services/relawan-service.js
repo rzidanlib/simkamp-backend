@@ -72,6 +72,18 @@ const getByKandidatId = async (kandidatId) => {
   }
 };
 
+const getByAdminId = async (adminId) => {
+  try {
+    const relawan = await relawanModel.getByAdminId(adminId);
+    if (!relawan) {
+      throw new ResponseError(404, "Relawan not found");
+    }
+    return relawan;
+  } catch (error) {
+    throw new ResponseError(500, error.message);
+  }
+};
+
 const update = async (relawanId, data) => {
   try {
     const relawan = await relawanModel.get(relawanId);
@@ -146,6 +158,7 @@ export default {
   create,
   get,
   getAll,
+  getByAdminId,
   getByKandidatId,
   update,
   remove,

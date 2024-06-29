@@ -15,6 +15,10 @@ arusKasRoutes.get(
   "/aruskas/get-by-relawan/:id?",
   arusKasController.getByRelawanId
 );
+arusKasRoutes.get(
+  "/aruskas/get-by-kandidat/:id?",
+  arusKasController.getArusKasByKandidatId
+);
 arusKasRoutes.get("/aruskas/get/:id", arusKasController.get);
 arusKasRoutes.get("/aruskas/get-all", arusKasController.getAll);
 arusKasRoutes.put(

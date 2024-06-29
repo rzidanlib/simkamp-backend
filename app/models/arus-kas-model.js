@@ -62,6 +62,41 @@ const getByRelawanId = async (relawanId) => {
   }
 };
 
+const getArusKasByKandidatId = async (kandidatId) => {
+  const query = `
+    SELECT ak.*
+    FROM arus_kas ak
+    JOIN relawan r ON ak.aruskas_relawan_id = r.relawan_id
+    JOIN kandidat k ON r.relawan_kandidat_id = k.kandidat_id
+    WHERE k.kandidat_id = $1
+  `;
+  try {
+    const { rows } = await db.query(query, [kandidatId]);
+    return rows;
+  } catch (error) {
+    console.error("Error fetching aruskas by kandidatId:", error);
+    throw error;
+  }
+};
+
+const getArusKasByAdminId = async (adminId) => {
+  const query = `
+    SELECT ak.*
+    FROM arus_kas ak
+    JOIN relawan r ON ak.aruskas_relawan_id = r.relawan_id
+    JOIN kandidat k ON r.relawan_kandidat_id = k.kandidat_id
+    JOIN users u ON k.kandidat_admin_id = u.user_id
+    WHERE u.user_id = $1
+  `;
+  try {
+    const { rows } = await db.query(query, [adminId]);
+    return rows;
+  } catch (error) {
+    console.error("Error fetching aruskas by adminId:", error);
+    throw error;
+  }
+};
+
 const update = async (aruskasId, data) => {
   const query = `
     UPDATE arus_kas
@@ -91,6 +126,8 @@ export default {
   get,
   getAll,
   getByRelawanId,
+  getArusKasByKandidatId,
+  getArusKasByAdminId,
   update,
   remove,
 };

@@ -51,6 +51,24 @@ const getByRelawanId = async (relawanId) => {
   }
 };
 
+const getByKandidatId = async (kandidatId) => {
+  try {
+    const quickCount = await quickCountModel.getByKandidatId(kandidatId);
+    return quickCount;
+  } catch (error) {
+    throw new ResponseError(500, error.message);
+  }
+};
+
+const getByAdminId = async (adminId) => {
+  try {
+    const quickCount = await quickCountModel.getByAdminId(adminId);
+    return quickCount;
+  } catch (error) {
+    throw new ResponseError(500, error.message);
+  }
+};
+
 const update = async (id, data) => {
   try {
     const quickCount = validate(updateQuickCountValidations, data);
@@ -109,6 +127,8 @@ export default {
   create,
   get,
   getAll,
+  getByAdminId,
+  getByKandidatId,
   getByRelawanId,
   update,
   remove,
