@@ -79,8 +79,7 @@ const update = async (id, data) => {
     }
 
     if (
-      arusKas.aruskas_foto_kuitansi &&
-      existingArusKas.aruskas_foto_kuitansi
+      arusKas.aruskas_foto_kuitansi !== existingArusKas.aruskas_foto_kuitansi
     ) {
       const oldFilePathFoto = path.join(
         `public/${existingArusKas.aruskas_foto_kuitansi}`

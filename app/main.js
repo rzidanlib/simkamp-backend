@@ -16,6 +16,7 @@ import { arusKasRoutes } from "./routes/api/arus-kas-routes.js";
 import { logistikRoutes } from "./routes/api/logistik-routes.js";
 import { pemakaianLogistikRoutes } from "./routes/api/pemakaian-logistik-routes.js";
 import { quickCountRoutes } from "./routes/api/quick-count-routes.js";
+import { dashboarRoutes } from "./routes/api/dashboard-routes.js";
 
 dotenv.config({ path: `${process.cwd()}/.env.development` });
 
@@ -42,6 +43,7 @@ app.use("/api/v1/", arusKasRoutes);
 app.use("/api/v1/", logistikRoutes);
 app.use("/api/v1/", pemakaianLogistikRoutes);
 app.use("/api/v1/", quickCountRoutes);
+app.use("/api/v1/", dashboarRoutes);
 app.use("/api/v1/", authRouter);
 
 app.use(errorMiddleware);

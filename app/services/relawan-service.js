@@ -107,7 +107,7 @@ const update = async (relawanId, data) => {
       validateRelawan.relawan_password = relawan.relawan_password;
     }
 
-    if (relawan.relawan_foto && validateRelawan.relawan_foto) {
+    if (validateRelawan.relawan_foto !== relawan.relawan_foto) {
       const oldFoto = path.join(`public/${relawan.relawan_foto}`);
       try {
         await fs.promises.access(oldFoto);

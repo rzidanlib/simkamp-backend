@@ -17,7 +17,7 @@ const createRelawanValidations = Joi.object({
 const updateRelawanValidations = Joi.object({
   relawan_nama: Joi.string().max(100),
   relawan_email: Joi.string().email(),
-  relawan_password: Joi.string().min(8),
+  relawan_password: Joi.string().min(8).allow(""),
   relawan_no_telp: Joi.string().max(15),
   relawan_usia: Joi.number(),
   relawan_jenis_kelamin: Joi.string(),
