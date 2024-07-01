@@ -78,7 +78,7 @@ const update = async (id, data) => {
       throw new ResponseError(404, "Quick Count not found");
     }
 
-    if (quickCount.quick_count_foto && existingQuickCount.quick_count_foto) {
+    if (quickCount.quick_count_foto !== existingQuickCount.quick_count_foto) {
       const oldFilePathFoto = path.join(
         `public/${existingQuickCount.quick_count_foto}`
       );

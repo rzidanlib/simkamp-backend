@@ -82,7 +82,7 @@ const update = async (id, data) => {
     }
 
     if (
-      calonPemilih.calon_pemilih_foto &&
+      calonPemilih.calon_pemilih_foto !==
       existingCalonPemilih.calon_pemilih_foto
     ) {
       const oldFilePathFoto = path.join(
@@ -97,7 +97,7 @@ const update = async (id, data) => {
     }
 
     if (
-      calonPemilih.calon_pemilih_foto_ktp &&
+      calonPemilih.calon_pemilih_foto_ktp !==
       existingCalonPemilih.calon_pemilih_foto_ktp
     ) {
       const oldFilePathKtp = path.join(
