@@ -37,4 +37,44 @@ dashboarRoutes.get(
   dashboardController.getRelawanAdmin
 );
 
+// Calon Pemilih
+dashboarRoutes.get(
+  "/dashboard/total-pemilih-relawan",
+  dashboardController.getTotalPemilihRelawan
+);
+dashboarRoutes.get(
+  "/dashboard/total-pemilih-kandidat",
+  dashboardController.getTotalPemilihKandidat
+);
+dashboarRoutes.get(
+  "/dashboard/total-pemilih-admin",
+  dashboardController.getTotalPemilihAdmin
+);
+dashboarRoutes.get(
+  "/dashboard/pemilih-relawan",
+  dashboardController.getPemilihRelawan
+);
+dashboarRoutes.get(
+  "/dashboard/pemilih-kandidat",
+  dashboardController.getPemilihKandidat
+);
+dashboarRoutes.get(
+  "/dashboard/pemilih-admin",
+  dashboardController.getPemilihAdmin
+);
+
+// Logistik
+dashboarRoutes.get(
+  "/dashboard/total-logistik-relawan",
+  dashboardController.getTotalLogistikRelawan
+);
+dashboarRoutes.get(
+  "/dashboard/total-logistik-kandidat",
+  dashboardController.getTotalLogistikKandidat
+);
+dashboarRoutes.get(
+  "/dashboard/total-logistik-admin",
+  dashboardController.getTotalLogistikAdmin
+);
+
 export { dashboarRoutes };

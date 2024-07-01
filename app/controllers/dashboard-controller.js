@@ -99,6 +99,125 @@ const getRelawanAdmin = async (req, res, next) => {
   }
 };
 
+const getTotalPemilihRelawan = async (req, res, next) => {
+  try {
+    const relawanId = req.userId;
+    const pemilih = await dashboardService.getTotalPemilihRelawan(relawanId);
+    res.status(200).json({
+      message: "Berhasil mendapatkan data arus kas",
+      data: pemilih,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getTotalPemilihKandidat = async (req, res, next) => {
+  try {
+    const kandidatId = req.userId;
+    const pemilih = await dashboardService.getTotalPemilihKandidat(kandidatId);
+    res.status(200).json({
+      message: "Berhasil mendapatkan data arus kas",
+      data: pemilih,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getTotalPemilihAdmin = async (req, res, next) => {
+  try {
+    const adminId = req.userId;
+    const pemilih = await dashboardService.getTotalPemilihAdmin(adminId);
+    res.status(200).json({
+      message: "Berhasil mendapatkan data arus kas",
+      data: pemilih,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getPemilihRelawan = async (req, res, next) => {
+  try {
+    const relawanId = req.userId;
+    const pemilih = await dashboardService.getPemilihRelawan(relawanId);
+    res.status(200).json({
+      message: "Berhasil mendapatkan data arus kas",
+      data: pemilih,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getPemilihKandidat = async (req, res, next) => {
+  try {
+    const kandidatId = req.userId;
+    const pemilih = await dashboardService.getPemilihKandidat(kandidatId);
+    res.status(200).json({
+      message: "Berhasil mendapatkan data arus kas",
+      data: pemilih,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getPemilihAdmin = async (req, res, next) => {
+  try {
+    const adminId = req.userId;
+    const pemilih = await dashboardService.getPemilihAdmin(adminId);
+    res.status(200).json({
+      message: "Berhasil mendapatkan data arus kas",
+      data: pemilih,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getTotalLogistikRelawan = async (req, res, next) => {
+  try {
+    const relawanId = req.userId;
+    const logistik = await dashboardService.getTotalLogistikRelawan(relawanId);
+    res.status(200).json({
+      message: "Berhasil mendapatkan data arus kas",
+      data: logistik,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getTotalLogistikKandidat = async (req, res, next) => {
+  try {
+    const kandidatId = req.userId;
+    const logistik = await dashboardService.getTotalLogistikKandidat(
+      kandidatId
+    );
+    res.status(200).json({
+      message: "Berhasil mendapatkan data arus kas",
+      data: logistik,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getTotalLogistikAdmin = async (req, res, next) => {
+  try {
+    const adminId = req.userId;
+    const logistik = await dashboardService.getTotalLogistikAdmin(adminId);
+    res.status(200).json({
+      message: "Berhasil mendapatkan data arus kas",
+      data: logistik,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getArusKasRelawan,
   getArusKasKandidat,
@@ -107,4 +226,13 @@ export default {
   getTotalRelawanAdmin,
   getRelawanKandidat,
   getRelawanAdmin,
+  getTotalPemilihRelawan,
+  getTotalPemilihKandidat,
+  getTotalPemilihAdmin,
+  getPemilihRelawan,
+  getPemilihKandidat,
+  getPemilihAdmin,
+  getTotalLogistikRelawan,
+  getTotalLogistikKandidat,
+  getTotalLogistikAdmin,
 };
