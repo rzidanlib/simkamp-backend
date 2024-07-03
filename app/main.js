@@ -23,7 +23,7 @@ dotenv.config({ path: `${process.cwd()}/.env.production` });
 export const app = express();
 export const __dirname = path.resolve();
 
-app.use(cors({ origin: true, credentials: true }));
+// app.use(cors({ origin: true, credentials: true }));
 app.use(
   cors({
     origin: "http://localhost:3000",
