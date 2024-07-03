@@ -18,7 +18,7 @@ import { pemakaianLogistikRoutes } from "./routes/api/pemakaian-logistik-routes.
 import { quickCountRoutes } from "./routes/api/quick-count-routes.js";
 import { dashboarRoutes } from "./routes/api/dashboard-routes.js";
 
-dotenv.config({ path: `${process.cwd()}/.env.development` });
+dotenv.config({ path: `${process.cwd()}/.env.production` });
 
 export const app = express();
 export const __dirname = path.resolve();

@@ -5,3 +5,5 @@ package-lock.json
 *.log
 *.gz
 .env.development
+.env.production
+password.txt
