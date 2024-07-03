@@ -18,45 +18,37 @@ import { pemakaianLogistikRoutes } from "./routes/api/pemakaian-logistik-routes.
 import { quickCountRoutes } from "./routes/api/quick-count-routes.js";
 import { dashboardRoutes } from "./routes/api/dashboard-routes.js";
 
-// dotenv.config({ path: `${process.cwd()}/.env.development` });
-dotenv.config();
+dotenv.config({ path: `${process.cwd()}/.env.development` });
+// dotenv.config();
 
-// Function to initialize and start the server
-function initServer() {
-  const app = express();
-  const __dirname = path.resolve();
+export const app = express();
+export const __dirname = path.resolve();
 
-  app.use(cors({ origin: true, credentials: true }));
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: false }));
-  app.use(express.static(path.join(__dirname, "public")));
+app.use(cors({ origin: true, credentials: true }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, "public")));
 
-  // Middleware
-  app.use(checkDatabaseConnection);
+// Middleware
+app.use(checkDatabaseConnection);
 
-  // Routes
-  app.use("/api/v1/", publicAPI);
-  app.use("/api/v1/", miscRouter);
-  app.use("/api/v1/", adminRoutes);
-  app.use("/api/v1/", relawanRoutes);
-  app.use("/api/v1/", calonPemilihRoutes);
-  app.use("/api/v1/", arusKasRoutes);
-  app.use("/api/v1/", logistikRoutes);
-  app.use("/api/v1/", pemakaianLogistikRoutes);
-  app.use("/api/v1/", quickCountRoutes);
-  app.use("/api/v1/", dashboardRoutes);
-  app.use("/api/v1/", authRouter);
+// Routes
+app.use("/api/v1/", publicAPI);
+app.use("/api/v1/", miscRouter);
+app.use("/api/v1/", adminRoutes);
+app.use("/api/v1/", relawanRoutes);
+app.use("/api/v1/", calonPemilihRoutes);
+app.use("/api/v1/", arusKasRoutes);
+app.use("/api/v1/", logistikRoutes);
+app.use("/api/v1/", pemakaianLogistikRoutes);
+app.use("/api/v1/", quickCountRoutes);
+app.use("/api/v1/", dashboardRoutes);
+app.use("/api/v1/", authRouter);
 
-  app.use(errorMiddleware);
+app.use(errorMiddleware);
 
-  const PORT = process.env.APP_PORT || 8081;
+const PORT = process.env.APP_PORT || 8081;
 
-  app.listen(PORT, () => {
-    console.log("Server running on", PORT);
-  });
-
-  return app; // Optionally return the app instance if needed
-}
-
-// Default export the function for serverless deployment
-export default initServer;
+app.listen(PORT, () => {
+  console.log("Server running on", PORT);
+});
