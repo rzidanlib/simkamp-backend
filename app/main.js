@@ -18,18 +18,12 @@ import { pemakaianLogistikRoutes } from "./routes/api/pemakaian-logistik-routes.
 import { quickCountRoutes } from "./routes/api/quick-count-routes.js";
 import { dashboarRoutes } from "./routes/api/dashboard-routes.js";
 
-dotenv.config({ path: `${process.cwd()}/.env.production` });
+dotenv.config();
 
 export const app = express();
 export const __dirname = path.resolve();
 
-// app.use(cors({ origin: true, credentials: true }));
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-    credentials: true,
-  })
-);
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
