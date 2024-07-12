@@ -30,7 +30,7 @@ export const authMiddleware = async (req, res, next) => {
 
     const isTokenBlacklisted = await authModel.getBlacklistToken(token);
     if (isTokenBlacklisted) {
-      return res.status(401).json({ errors: "Token sudah tidak berlaku." });
+      return res.status(401).json({ errors: "Token sudah tidak berlaku" });
     }
 
     jwt.verify(token, JWT_SECRET, (err, decoded) => {

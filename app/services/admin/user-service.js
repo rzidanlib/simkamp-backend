@@ -1,4 +1,4 @@
-import bcyrpt from "bcrypt";
+import bcrypt from "bcrypt";
 import userModel from "../../models/admin/user-model.js";
 
 import {
@@ -19,24 +19,24 @@ const create = async (request) => {
   try {
     const user = validate(createUserValidation, request);
 
-    if (user.user_email) {
-      await checkUserIsExist(user.user_email);
+    if (user.email) {
+      await checkUserIsExist(user.email);
     }
 
-    user.user_password = await bcyrpt.hash(user.user_password, 10);
-    const createUser = await userModel.create(user);
+    user.password = await bcrypt.hash(user.password, 10);
+    const createdUser = await userModel.create(user);
 
-    return createUser;
+    return createdUser;
   } catch (error) {
     throw new ResponseError(500, error.message);
   }
 };
 
-const get = async (userId) => {
+const get = async (id) => {
   try {
-    const user = await userModel.getById(userId);
+    const user = await userModel.get(id);
     if (!user) {
-      throw new ResponseError(404, "User not found");
+      throw new ResponseError(404, "User tidak ditemukan");
     }
     return user;
   } catch (error) {
@@ -48,7 +48,7 @@ const getAll = async () => {
   try {
     const users = await userModel.getAll();
     if (!users) {
-      throw new ResponseError(404, "User not found");
+      throw new ResponseError(404, "User tidak ada");
     }
     return users;
   } catch (error) {
@@ -56,45 +56,42 @@ const getAll = async () => {
   }
 };
 
-const updateCurrent = async (userId, data) => {
+const update = async (id, data) => {
   try {
-    const user = await userModel.getById(userId);
+    const user = await userModel.get(id);
 
     if (!user) {
-      throw new Error("User not found");
+      throw new ResponseError(404, "User tidak ditemukan");
     }
 
     const validateUser = validate(updateUserValidation, data);
 
-    if (validateUser.user_email !== user.user_email) {
-      await checkUserIsExist(validateUser.user_email);
+    if (validateUser.email && validateUser.email !== user.email) {
+      await checkUserIsExist(validateUser.email);
     }
 
-    if (validateUser.user_password) {
-      validateUser.user_password = await bcyrpt.hash(
-        validateUser.user_password,
-        10
-      );
+    if (validateUser.password) {
+      validateUser.password = await bcrypt.hash(validateUser.password, 10);
     } else {
-      validateUser.user_password = user.user_password;
+      validateUser.password = user.password;
     }
 
-    const updatedUser = await userModel.updateCurrent(userId, validateUser);
+    const updatedUser = await userModel.update(id, validateUser);
     return updatedUser;
   } catch (error) {
     throw new ResponseError(500, error.message);
   }
 };
 
-const remove = async (userId) => {
+const remove = async (id) => {
   try {
-    const user = await userModel.getById(userId);
+    const user = await userModel.get(id);
 
     if (!user) {
-      throw new ResponseError(404, "User not found");
+      throw new ResponseError(404, "User tidak ditemukan");
     }
 
-    const deletedUser = await userModel.remove(userId);
+    const deletedUser = await userModel.remove(id);
     return deletedUser;
   } catch (error) {
     throw new ResponseError(500, error.message);
@@ -105,6 +102,6 @@ export default {
   create,
   get,
   getAll,
-  updateCurrent,
+  update,
   remove,
 };

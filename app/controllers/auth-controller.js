@@ -5,11 +5,11 @@ const login = async (req, res, next) => {
   try {
     const result = await authService.login(req.body);
     if (!result) {
-      throw new ResponseError(401, "Login gagal."); // Atau pesan kesalahan yang sesuai
+      throw new ResponseError(401, "Login gagal");
     }
 
     res.status(200).json({
-      message: "Login berhasil.",
+      message: "Login berhasil",
       data: result,
     });
   } catch (error) {
@@ -23,7 +23,7 @@ const logout = async (req, res, next) => {
     const expiry = new Date(Date.now() + 15 * 60 * 1000);
     const blacklistToken = await authService.logout(token, expiry);
 
-    res.status(200).json({ message: "Logout berhasil.", blacklistToken });
+    res.status(200).json({ message: "Logout berhasil", blacklistToken });
   } catch (error) {
     next(error);
   }
@@ -38,7 +38,7 @@ const getCurrent = async (req, res, next) => {
     const user = await authService.getCurrent(authData);
     res
       .status(200)
-      .json({ message: "Berhasil mendapatkan user saat ini.", data: user });
+      .json({ message: "Berhasil mendapatkan user saat ini", data: user });
   } catch (error) {
     next(error);
   }

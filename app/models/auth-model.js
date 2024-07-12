@@ -115,7 +115,7 @@ import db from "../config/database-config.js";
 const getUser = async (value) => {
   const query = `
     SELECT * FROM users
-    WHERE id = $1
+    WHERE email = $1
   `;
   const result = await db.query(query, [value]);
   return result.rows[0];
@@ -135,9 +135,6 @@ const getBlacklistToken = async (token) => {
 };
 
 export default {
-  // getUserAdmin,
-  // getKandidat,
-  // getRelawan,
   getUser,
   insertBlacklistToken,
   getBlacklistToken,

@@ -27,7 +27,7 @@ const validateLoginRequest = async (request) => {
   const isRoleExist = await rolesModel.get(validatedUser.role);
 
   if (!isRoleExist) {
-    throw new ResponseError(401, "Role tidak ada.");
+    throw new ResponseError(401, "Role tidak ada");
   }
 
   const user = await authModel.getUser(validatedUser.email);
@@ -53,7 +53,7 @@ const login = async (request) => {
     user.password
   );
   if (!isPasswordValid) {
-    throw new ResponseError(401, "Password yang dimasukan salah.");
+    throw new ResponseError(401, "Password yang dimasukan salah");
   }
 
   const token = generateToken(user, role);

@@ -22,6 +22,13 @@ import quickCountController from "../../controllers/quick-count-controller.js";
 const adminRoutes = new express.Router();
 adminRoutes.use(authMiddleware);
 
+// Users Routes
+adminRoutes.post("/users/create", userController.create);
+adminRoutes.get("/users/get/:userId", userController.get);
+adminRoutes.get("/users/get-all", userController.getAll);
+adminRoutes.put("/users/update/:userId", userController.update);
+adminRoutes.delete("/users/delete/:userId", userController.remove);
+
 // Roles Routes
 adminRoutes.get("/roles/get-all", rolesController.getAll);
 adminRoutes.get("/roles/get/:roleId", rolesController.get);
@@ -43,13 +50,6 @@ adminRoutes.put(
   partaiController.update
 );
 adminRoutes.delete("/partai/delete/:partaiId", partaiController.remove);
-
-// Users Routes
-adminRoutes.post("/users/create", userController.create);
-adminRoutes.get("/users/get/:userId", userController.get);
-adminRoutes.get("/users/get-all", userController.getAll);
-adminRoutes.put("/users/update-current", userController.updateCurrent);
-adminRoutes.delete("/users/delete/:userId", userController.remove);
 
 // Agama Routes
 adminRoutes.post("/agama/create", agamaController.create);

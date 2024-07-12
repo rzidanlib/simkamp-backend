@@ -9,7 +9,7 @@ import { errorMiddleware } from "./middleware/error-middleware.js";
 import { authRouter } from "./routes/api/auth-routes.js";
 import { miscRouter } from "./routes/api/misc-routes.js";
 import { publicAPI } from "./routes/publicApi/index.js";
-import { adminRoutes } from "./routes/admin/admin-routes.js";
+import { adminRoutes } from "./routes/api/admin-routes.js";
 import { relawanRoutes } from "./routes/api/relawan-routes.js";
 import { calonPemilihRoutes } from "./routes/api/calon-pemilih-routes.js";
 import { arusKasRoutes } from "./routes/api/arus-kas-routes.js";
