@@ -1,7 +1,10 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import config from "../config/config.js";
+
 import authModel from "../models/auth-model.js";
+import rolesModel from "../models/admin/roles-model.js";
+
 import { ResponseError } from "../error/response-error.js";
 import { loginValidation } from "../validations/auth-validations.js";
 import { validate } from "../validations/validation.js";
@@ -11,110 +14,55 @@ const env = process.env.NODE_ENV;
 const JWT_SECRET = config[env].secretKey;
 const TOKEN_EXPIRATION_SECONDS = 86400; // 24 hours
 
-// Helper function to validate user credentials
-async function validateUserCredentials(validateUser) {
-  const user = await loginByRole(validateUser);
-  if (!user) {
-    throw new ResponseError(401, "User tidak ditemukan.");
-  }
-  return user;
-}
-
-// Helper function to generate JWT token
-function generateToken(user) {
-  return jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, {
+function generateToken(user, role) {
+  return jwt.sign({ id: user.id, role: role.role_name }, JWT_SECRET, {
     algorithm: "HS256",
     allowInsecureKeySizes: true,
     expiresIn: TOKEN_EXPIRATION_SECONDS,
   });
 }
 
-const fetchAndFormatUserData = async (fetchFunction, email, id, rolePrefix) => {
-  const entity = await fetchFunction(email || id);
-  if (!entity) {
-    throw new Error(`${rolePrefix} not found`);
+const validateLoginRequest = async (request) => {
+  const validatedUser = validate(loginValidation, request);
+  const isRoleExist = await rolesModel.get(validatedUser.role);
+
+  if (!isRoleExist) {
+    throw new ResponseError(401, "Role tidak ada.");
   }
 
-  let prefix;
-  if (rolePrefix === "admin-partai" || rolePrefix === "administrator") {
-    prefix = "user";
-  } else {
-    prefix = rolePrefix;
-  }
-
-  return !id
-    ? {
-        id: entity[`${prefix}_id`],
-        name: entity[`${prefix}_nama`],
-        email: entity[`${prefix}_email`],
-        password: entity[`${prefix}_password`],
-        role: entity.role,
-      }
-    : entity;
-};
-
-const loginByRole = async (data) => {
-  const { role, email, id } = data;
-  const roleToFunction = {
-    "admin-partai": () => authModel.getUserAdmin(email || id),
-    administrator: () => authModel.getUserAdmin(email || id),
-    kandidat: () => authModel.getKandidat(email || id),
-    relawan: () => authModel.getRelawan(email || id),
-  };
-
-  const fetchFunction = roleToFunction[role];
-  if (!fetchFunction) {
-    throw new Error("Invalid role provided");
-  }
-
-  try {
-    const loginData = await fetchAndFormatUserData(
-      fetchFunction,
-      email,
-      id,
-      role
-    );
-    return loginData;
-  } catch (error) {
-    console.error("Login error:", error.message);
-    throw error;
-  }
-};
-
-const getCurrent = async (authData) => {
-  const user = await loginByRole(authData);
-
+  const user = await authModel.getUser(validatedUser.email);
   if (!user) {
-    throw new ResponseError(404, "User not found");
+    throw new ResponseError(
+      401,
+      `User dengan email ${validatedUser.email} tidak ditemukan.`
+    );
   }
 
-  return user;
+  return { user, validatedUser, isRoleExist };
 };
 
 const login = async (request) => {
-  const validateUser = validate(loginValidation, request);
-  const user = await validateUserCredentials(validateUser);
-
-  if (!user) {
-    throw new ResponseError(401, "User tidak ditemukan.");
-  }
+  const {
+    user,
+    validatedUser,
+    isRoleExist: role,
+  } = await validateLoginRequest(request);
 
   const isPasswordValid = await bcrypt.compare(
-    validateUser.password,
+    validatedUser.password,
     user.password
   );
   if (!isPasswordValid) {
-    throw new ResponseError(401, "Password salah.");
+    throw new ResponseError(401, "Password yang dimasukan salah.");
   }
 
-  const token = generateToken(user);
+  const token = generateToken(user, role);
 
   return {
     user: {
       id: user.id,
-      name: user.name,
       email: user.email,
-      role: user.role,
+      role: role.role_name,
     },
     accessToken: token,
   };
@@ -127,6 +75,19 @@ const logout = async (token, expiry) => {
   } catch (error) {
     throw new ResponseError(400, "Failed to blacklist token");
   }
+};
+
+const getCurrent = async (authData) => {
+  const user = await authModel.getUser(authData.id);
+  if (!user) {
+    throw new ResponseError(404, "User not found");
+  }
+
+  return {
+    id: user.id,
+    email: user.email,
+    role: authData.role,
+  };
 };
 
 export default { login, logout, getCurrent };

@@ -3,7 +3,7 @@ import { ResponseError } from "../../error/response-error.js";
 
 const create = async (data) => {
   const query = `
-    INSERT INTO roles (role, role_deskripsi)
+    INSERT INTO roles (role, description, role_name)
     VALUES ($1, $2)
     RETURNING *;
   `;
@@ -14,7 +14,7 @@ const create = async (data) => {
 const get = async (roleId) => {
   const query = `
     SELECT * FROM roles
-    WHERE role_id = $1
+    WHERE id = $1
   `;
   const result = await db.query(query, [roleId]);
   return result.rows[0];
@@ -31,15 +31,12 @@ const getAll = async () => {
 const update = async (roleId, data) => {
   const query = `
     UPDATE roles
-    SET role = $1, role_deskripsi = $2
-    WHERE role_id = $3
+    SET role = $1, description = $2, role_name = $3
+    WHERE role_id = $4
     RETURNING *;
   `;
-  const result = await db.query(query, [
-    data.role,
-    data.role_deskripsi,
-    roleId,
-  ]);
+  const values = [data.role, data.role_deskripsi, data.role_name, roleId];
+  const result = await db.query(query, values);
   return result.rows[0];
 };
 
