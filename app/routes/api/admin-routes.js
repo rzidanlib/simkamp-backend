@@ -39,14 +39,14 @@ adminRoutes.delete("/roles/delete/:roleId", rolesController.remove);
 // Partai Routes
 adminRoutes.post(
   "/partai/create",
-  upload.single("partai_logo"),
+  upload("partai").single("logo"),
   partaiController.create
 );
 adminRoutes.get("/partai/get-all", partaiController.getAll);
 adminRoutes.get("/partai/get/:partaiId", partaiController.get);
 adminRoutes.put(
   "/partai/update/:partaiId",
-  upload.single("partai_logo"),
+  upload("partai").single("logo"),
   partaiController.update
 );
 adminRoutes.delete("/partai/delete/:partaiId", partaiController.remove);
@@ -105,14 +105,14 @@ adminRoutes.get("/kandidat/get-by-admin", kandidatController.getByAdminId);
 
 adminRoutes.post(
   "/kandidat/create",
-  upload.single("kandidat_foto"),
+  upload("foto_profil").single("kandidat_foto"),
   kandidatController.create
 );
 adminRoutes.get("/kandidat/get/:id", kandidatController.get);
 adminRoutes.get("/kandidat/get-all", kandidatController.getAll);
 adminRoutes.put(
   "/kandidat/update/:id",
-  upload.single("kandidat_foto"),
+  upload("foto_profil").single("kandidat_foto"),
   kandidatController.update
 );
 adminRoutes.delete("/kandidat/delete/:id", kandidatController.remove);

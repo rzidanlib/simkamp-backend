@@ -1,6 +1,7 @@
-import partaiModel from "../../models/admin/partai-model.js";
 import path from "path";
 import fs from "fs";
+
+import partaiModel from "../../models/admin/partai-model.js";
 
 import { validate } from "../../validations/validation.js";
 import {
@@ -15,7 +16,7 @@ const create = async (data) => {
 
     const newPartai = await partaiModel.create(partai);
     if (!newPartai) {
-      throw new ResponseError(500, "Failed to create partai");
+      throw new ResponseError(500, "Gagal membuat data partai");
     }
     return newPartai;
   } catch (error) {
@@ -27,7 +28,7 @@ const get = async (partaiId) => {
   try {
     const partai = await partaiModel.get(partaiId);
     if (!partai) {
-      throw new ResponseError(404, "Partai not found");
+      throw new ResponseError(404, "Partai tidak ditemukan");
     }
     return partai;
   } catch (error) {
@@ -39,7 +40,7 @@ const getAll = async () => {
   try {
     const partai = await partaiModel.getAll();
     if (!partai) {
-      throw new ResponseError(404, "No partai found");
+      throw new ResponseError(404, "Tidak ada data partai");
     }
     return partai;
   } catch (error) {
@@ -49,11 +50,27 @@ const getAll = async () => {
 
 const update = async (partaiId, data) => {
   try {
-    const partai = validate(updatePartaiValidation, data);
-    const updatedPartai = await partaiModel.update(partaiId, partai);
-    if (!updatedPartai) {
-      throw new ResponseError(500, "Failed to update partai");
+    const validatePartai = validate(updatePartaiValidation, data);
+    const existingPartai = await partaiModel.get(partaiId);
+    if (!existingPartai) {
+      throw new ResponseError(404, "Partai tidak ditemukan");
     }
+
+    if (validatePartai.logo !== existingPartai.logo) {
+      const oldFilePathFoto = path.join(`public/${existingPartai.logo}`);
+      try {
+        await fs.promises.access(oldFilePathFoto);
+        await fs.promises.unlink(oldFilePathFoto);
+      } catch (error) {
+        console.error("Error gagal menghapus logo partai:", error.message);
+      }
+    }
+
+    const updatedPartai = await partaiModel.update(partaiId, validatePartai);
+    if (!updatedPartai) {
+      throw new ResponseError(500, "Gagal memperbaharui partai");
+    }
+
     return updatedPartai;
   } catch (error) {
     throw new ResponseError(500, error.message);
@@ -64,9 +81,19 @@ const remove = async (partaiId) => {
   try {
     const partai = await partaiModel.get(partaiId);
     if (!partai) {
-      throw new ResponseError(404, "Partai not found");
+      throw new ResponseError(404, "Partai tidak ditemukan");
     }
-    await fs.unlinkSync(path.join(`public/${partai.partai_logo}`));
+
+    if (partai.logo) {
+      const oldFilePathFoto = path.join(`public/${partai.logo}`);
+      try {
+        await fs.promises.access(oldFilePathFoto);
+        await fs.promises.unlink(oldFilePathFoto);
+      } catch (error) {
+        console.error("Error gagal menghapus logo partai:", error.message);
+      }
+    }
+
     await partaiModel.remove(partaiId);
 
     return partai;

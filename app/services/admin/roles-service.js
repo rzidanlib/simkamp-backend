@@ -21,7 +21,7 @@ const create = async (data) => {
 
 const get = async (roleId) => {
   try {
-    const role = await rolesModel.get(roleId);
+    const role = await rolesModel.getRole(roleId);
     if (!role) {
       throw new ResponseError(404, "Role not found");
     }

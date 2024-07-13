@@ -24,7 +24,7 @@ function generateToken(user, role) {
 
 const validateLoginRequest = async (request) => {
   const validatedUser = validate(loginValidation, request);
-  const isRoleExist = await rolesModel.get(validatedUser.role);
+  const isRoleExist = await rolesModel.getRole({ roleId: validatedUser.role });
 
   if (!isRoleExist) {
     throw new ResponseError(401, "Role tidak ada");

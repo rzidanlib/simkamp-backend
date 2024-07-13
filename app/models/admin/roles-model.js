@@ -11,12 +11,24 @@ const create = async (data) => {
   return result.rows[0];
 };
 
-const get = async (roleId) => {
-  const query = `
+const getRole = async ({ roleId, roleName }) => {
+  let query = `
     SELECT * FROM roles
-    WHERE id = $1
+    WHERE
   `;
-  const result = await db.query(query, [roleId]);
+  const queryParams = [];
+
+  if (roleId) {
+    query += `id = $1`;
+    queryParams.push(roleId);
+  } else if (roleName) {
+    query += `role_name = $1`;
+    queryParams.push(roleName);
+  } else {
+    throw new Error("Role id atau role name harus tersedia");
+  }
+
+  const result = await db.query(query, queryParams);
   return result.rows[0];
 };
 
@@ -62,7 +74,7 @@ const remove = async (roleId) => {
 
 export default {
   create,
-  get,
+  getRole,
   getAll,
   update,
   remove,

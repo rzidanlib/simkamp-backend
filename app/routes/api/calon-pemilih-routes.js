@@ -8,7 +8,7 @@ calonPemilihRoutes.use(authMiddleware);
 
 calonPemilihRoutes.post(
   "/calon-pemilih/create",
-  upload.fields([
+  upload("calon_pemilih").fields([
     { name: "calon_pemilih_foto", maxCount: 1 },
     { name: "calon_pemilih_foto_ktp", maxCount: 1 },
   ]),
@@ -26,7 +26,7 @@ calonPemilihRoutes.get("/calon-pemilih/get/:id", calonPemilihController.get);
 calonPemilihRoutes.get("/calon-pemilih/get-all", calonPemilihController.getAll);
 calonPemilihRoutes.put(
   "/calon-pemilih/update/:id",
-  upload.fields([
+  upload("calon_pemilih").fields([
     { name: "calon_pemilih_foto", maxCount: 1 },
     { name: "calon_pemilih_foto_ktp", maxCount: 1 },
   ]),

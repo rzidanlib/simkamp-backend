@@ -2,19 +2,19 @@ import db from "../../config/database-config.js";
 
 const create = async (data) => {
   const query = `INSERT INTO partai 
-  (partai_label, partai_nama, partai_nomor, partai_logo) 
+  (akronim, nama_partai, nomor, logo) 
   VALUES ($1, $2, $3, $4) RETURNING *`;
   const { rows } = await db.query(query, [
-    data.partai_label,
-    data.partai_nama,
-    data.partai_nomor,
-    data.partai_logo,
+    data.akronim,
+    data.nama_partai,
+    data.nomor,
+    data.logo,
   ]);
   return rows[0];
 };
 
 const get = async (partaiId) => {
-  const query = `SELECT * FROM partai WHERE partai_id = $1`;
+  const query = `SELECT * FROM partai WHERE id = $1`;
   const { rows } = await db.query(query, [partaiId]);
   return rows[0];
 };
@@ -27,15 +27,15 @@ const getAll = async () => {
 
 const update = async (partaiId, data) => {
   // Build the base query and parameters excluding partai_logo
-  let query = `UPDATE partai SET partai_label = $1, partai_nama = $2, partai_nomor = $3`;
-  let params = [data.partai_label, data.partai_nama, data.partai_nomor];
+  let query = `UPDATE partai SET akronim = $1, nama_partai = $2, nomor = $3`;
+  let params = [data.akronim, data.nama_partai, data.nomor];
 
   // If partai_logo is provided, add it to the query and parameters
-  if (data.partai_logo) {
-    query += `, partai_logo = $4 WHERE partai_id = $5 RETURNING *`;
-    params.push(data.partai_logo, partaiId);
+  if (data.logo) {
+    query += `, logo = $4 WHERE id = $5 RETURNING *`;
+    params.push(data.logo, partaiId);
   } else {
-    query += ` WHERE partai_id = $4 RETURNING *`;
+    query += ` WHERE id = $4 RETURNING *`;
     params.push(partaiId);
   }
 
@@ -44,7 +44,7 @@ const update = async (partaiId, data) => {
 };
 
 const remove = async (partaiId) => {
-  const query = `DELETE FROM partai WHERE partai_id = $1`;
+  const query = `DELETE FROM partai WHERE id = $1`;
   await db.query(query, [partaiId]);
 };
 

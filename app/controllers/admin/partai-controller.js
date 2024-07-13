@@ -3,16 +3,16 @@ import { ResponseError } from "../../error/response-error.js";
 
 const create = async (req, res, next) => {
   try {
-    const { partai_label, partai_nama, partai_nomor } = req.body;
+    const { akronim, nama_partai, nomor } = req.body;
     if (!req.file) {
       throw new ResponseError(400, "File is required");
     }
 
     const data = {
-      partai_label,
-      partai_nama,
-      partai_nomor,
-      partai_logo: `images/${req.file.filename}`,
+      akronim,
+      nama_partai,
+      nomor,
+      logo: `images/partai/${req.file.filename}`,
     };
 
     const result = await partaiService.create(data);
@@ -45,15 +45,15 @@ const get = async (req, res, next) => {
 
 const update = async (req, res, next) => {
   try {
-    const { partai_label, partai_nama, partai_nomor } = req.body;
+    const { akronim, nama_partai, nomor } = req.body;
     const data = {
-      partai_label,
-      partai_nama,
-      partai_nomor,
+      akronim,
+      nama_partai,
+      nomor,
     };
 
     if (req.file) {
-      data.partai_logo = `images/${req.file.filename}`;
+      data.logo = `images/partai/${req.file.filename}`;
     }
 
     const result = await partaiService.update(req.params.partaiId, data);

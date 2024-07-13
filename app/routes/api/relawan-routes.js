@@ -8,7 +8,7 @@ relawanRoutes.use(authMiddleware);
 
 relawanRoutes.post(
   "/relawan/create",
-  upload.single("relawan_foto"),
+  upload("relawan").single("relawan_foto"),
   relawanController.create
 );
 relawanRoutes.get(
@@ -19,7 +19,7 @@ relawanRoutes.get("/relawan/get/:id", relawanController.get);
 relawanRoutes.get("/relawan/get-all", relawanController.getAll);
 relawanRoutes.put(
   "/relawan/update/:id",
-  upload.single("relawan_foto"),
+  upload("relawan").single("relawan_foto"),
   relawanController.update
 );
 relawanRoutes.delete("/relawan/delete/:id", relawanController.remove);

@@ -8,7 +8,7 @@ arusKasRoutes.use(authMiddleware);
 
 arusKasRoutes.post(
   "/aruskas/create",
-  upload.single("aruskas_foto_kuitansi"),
+  upload("aruskas").single("aruskas_foto_kuitansi"),
   arusKasController.create
 );
 arusKasRoutes.get(
@@ -23,7 +23,7 @@ arusKasRoutes.get("/aruskas/get/:id", arusKasController.get);
 arusKasRoutes.get("/aruskas/get-all", arusKasController.getAll);
 arusKasRoutes.put(
   "/aruskas/update/:id",
-  upload.single("aruskas_foto_kuitansi"),
+  upload("aruskas").single("aruskas_foto_kuitansi"),
   arusKasController.update
 );
 arusKasRoutes.delete("/aruskas/delete/:id", arusKasController.remove);

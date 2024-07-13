@@ -26,21 +26,26 @@ const uploadMultiple = multer({
 }).array("image", 12);
 
 // Set storage engine
-const storage = multer.diskStorage({
-  destination: "public/images",
-  // destination: tempDir,
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
+const storage = (destination) =>
+  multer.diskStorage({
+    destination: function (req, file, cb) {
+      const destPath = `public/images/${destination}`;
+      cb(null, destPath);
+    },
+    filename: function (req, file, cb) {
+      cb(null, Date.now() + path.extname(file.originalname)); // Use Date.now() to ensure unique filenames
+    },
+  });
 
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 1000000 },
-  fileFilter: function (req, file, cb) {
-    checkFileType(file, cb);
-  },
-});
+const upload = (destPath) => {
+  return multer({
+    storage: storage(destPath),
+    limits: { fileSize: 1000000 },
+    fileFilter: function (req, file, cb) {
+      checkFileType(file, cb);
+    },
+  });
+};
 
 // // Check file Type
 function checkFileType(file, cb) {
