@@ -1,9 +1,9 @@
-import db from "../../config/database-config";
+import db from "../../config/database-config.js";
 
 const create = async (data) => {
   const query = `
-	INSERT INTO admin_partai (user_id, nama_lengkap, nomor_telepon, alamat, partai_id, posisi, dapil_id, foto_profil, status_akun)
-	VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+	INSERT INTO admin_partai (user_id, nama_lengkap, nomor_telepon, alamat, partai_id, posisi, dapil_id, foto_profil)
+	VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
 	RETURNING *;
   `;
   const values = [
@@ -15,7 +15,6 @@ const create = async (data) => {
     data.posisi,
     data.dapil_id,
     data.foto_profil,
-    data.status_akun,
   ];
   const res = await db.query(query, values);
   return res.rows[0];
@@ -40,12 +39,12 @@ const getAll = async () => {
 const update = async (adminId, data) => {
   const query = `
 	UPDATE admin_partai
-	SET user_id = $1 nama_lengkap = $2, nomor_telepon = $3, alamat = $4, partai_id = $5, posisi = $6, dapil_id = $7, foto_profil = $8, status_akun = $9
-	WHERE id = $10
+	SET nama_lengkap = $2, nomor_telepon = $3, alamat = $4, partai_id = $5, posisi = $6, dapil_id = $7, foto_profil = $8
+	WHERE id = $1
 	RETURNING *;
   `;
   const values = [
-    data.user_id,
+    adminId,
     data.nama_lengkap,
     data.nomor_telepon,
     data.alamat,
@@ -53,8 +52,6 @@ const update = async (adminId, data) => {
     data.posisi,
     data.dapil_id,
     data.foto_profil,
-    data.status_akun,
-    adminId,
   ];
   const res = await db.query(query, values);
   return res.rows[0];

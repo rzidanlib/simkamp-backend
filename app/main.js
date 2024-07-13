@@ -10,6 +10,8 @@ import { authRouter } from "./routes/api/auth-routes.js";
 import { miscRouter } from "./routes/api/misc-routes.js";
 import { publicAPI } from "./routes/publicApi/index.js";
 import { adminRoutes } from "./routes/api/admin-routes.js";
+import { adminPartaiRoutes } from "./routes/api/admin-partai-routes.js";
+
 import { relawanRoutes } from "./routes/api/relawan-routes.js";
 import { calonPemilihRoutes } from "./routes/api/calon-pemilih-routes.js";
 import { arusKasRoutes } from "./routes/api/arus-kas-routes.js";
@@ -37,6 +39,8 @@ app.use("/api/v1/", miscRouter);
 
 // Protected Route
 app.use("/api/v1/", adminRoutes);
+app.use("/api/v1/", adminPartaiRoutes);
+
 app.use("/api/v1/", relawanRoutes);
 app.use("/api/v1/", calonPemilihRoutes);
 app.use("/api/v1/", arusKasRoutes);
