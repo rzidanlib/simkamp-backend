@@ -1,6 +1,5 @@
 import dotenv from "dotenv";
-dotenv.config({ path: `${process.cwd()}/.env.development` });
-// dotenv.config();
+dotenv.config();
 
 const config = {
   development: {
