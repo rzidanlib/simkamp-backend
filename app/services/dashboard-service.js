@@ -1,10 +1,19 @@
+import { ResponseError } from "../error/response-error.js";
 import dashboardModel from "../models/dashboard-model.js";
 
 // ArusKas
 const getArusKasRelawan = async (relawanId) => {
   try {
     const arusKas = await dashboardModel.getArusKasRelawan(relawanId);
-    return arusKas;
+    if (arusKas === undefined) {
+      return {
+        description: "Kosong",
+        currentvalue: 0,
+        newvalue: 0,
+      };
+    } else {
+      return arusKas;
+    }
   } catch (error) {
     throw new ResponseError(500, error.message);
   }
@@ -13,7 +22,15 @@ const getArusKasRelawan = async (relawanId) => {
 const getArusKasKandidat = async (kandidatId) => {
   try {
     const arusKas = await dashboardModel.getArusKasKandidat(kandidatId);
-    return arusKas;
+    if (arusKas === undefined) {
+      return {
+        description: "Kosong",
+        currentvalue: 0,
+        newvalue: 0,
+      };
+    } else {
+      return arusKas;
+    }
   } catch (error) {
     throw new ResponseError(500, error.message);
   }
@@ -22,7 +39,15 @@ const getArusKasKandidat = async (kandidatId) => {
 const getArusKasAdmin = async (adminId) => {
   try {
     const arusKas = await dashboardModel.getArusKasAdmin(adminId);
-    return arusKas;
+    if (arusKas === undefined) {
+      return {
+        description: "Kosong",
+        currentvalue: 0,
+        newvalue: 0,
+      };
+    } else {
+      return arusKas;
+    }
   } catch (error) {
     throw new ResponseError(500, error.message);
   }
@@ -31,8 +56,16 @@ const getArusKasAdmin = async (adminId) => {
 // Relawan
 const getTotalRelawanKandidat = async (kandidatId) => {
   try {
-    const arusKas = await dashboardModel.getTotalRelawanKandidat(kandidatId);
-    return arusKas;
+    const totalRelawan = await dashboardModel.getTotalRelawanKandidat(
+      kandidatId
+    );
+    if (totalRelawan === undefined) {
+      return {
+        currentvalue: 0,
+      };
+    } else {
+      return totalRelawan;
+    }
   } catch (error) {
     throw new ResponseError(500, error.message);
   }
@@ -40,8 +73,14 @@ const getTotalRelawanKandidat = async (kandidatId) => {
 
 const getTotalRelawanAdmin = async (adminId) => {
   try {
-    const arusKas = await dashboardModel.getTotalRelawanAdmin(adminId);
-    return arusKas;
+    const totalRelawan = await dashboardModel.getTotalRelawanAdmin(adminId);
+    if (totalRelawan === undefined) {
+      return {
+        currentvalue: 0,
+      };
+    } else {
+      return totalRelawan;
+    }
   } catch (error) {
     throw new ResponseError(500, error.message);
   }
@@ -68,7 +107,13 @@ const getRelawanAdmin = async (adminId) => {
 const getTotalPemilihRelawan = async (relawanId) => {
   try {
     const totalPemilih = await dashboardModel.getTotalPemilihRelawan(relawanId);
-    return totalPemilih;
+    if (totalPemilih === undefined) {
+      return {
+        currentvalue: 0,
+      };
+    } else {
+      return totalPemilih;
+    }
   } catch (error) {
     throw new ResponseError(500, error.message);
   }
@@ -79,7 +124,13 @@ const getTotalPemilihKandidat = async (kandidatId) => {
     const totalPemilih = await dashboardModel.getTotalPemilihKandidat(
       kandidatId
     );
-    return totalPemilih;
+    if (totalPemilih === undefined) {
+      return {
+        currentvalue: 0,
+      };
+    } else {
+      return totalPemilih;
+    }
   } catch (error) {
     throw new ResponseError(500, error.message);
   }
@@ -88,7 +139,13 @@ const getTotalPemilihKandidat = async (kandidatId) => {
 const getTotalPemilihAdmin = async (adminId) => {
   try {
     const totalPemilih = await dashboardModel.getTotalPemilihAdmin(adminId);
-    return totalPemilih;
+    if (totalPemilih === undefined) {
+      return {
+        currentvalue: 0,
+      };
+    } else {
+      return totalPemilih;
+    }
   } catch (error) {
     throw new ResponseError(500, error.message);
   }
@@ -124,7 +181,14 @@ const getPemilihAdmin = async (adminId) => {
 const getTotalLogistikRelawan = async (relawanId) => {
   try {
     const logistik = await dashboardModel.getTotalLogistikRelawan(relawanId);
-    return logistik;
+    if (logistik === undefined) {
+      return {
+        currentvalue: 0,
+        newvalue: "Kosong",
+      };
+    } else {
+      return logistik;
+    }
   } catch (error) {
     throw new ResponseError(500, error.message);
   }
@@ -133,7 +197,14 @@ const getTotalLogistikRelawan = async (relawanId) => {
 const getTotalLogistikKandidat = async (kandidatId) => {
   try {
     const logistik = await dashboardModel.getTotalLogistikKandidat(kandidatId);
-    return logistik;
+    if (logistik === undefined) {
+      return {
+        currentvalue: 0,
+        newvalue: "Kosong",
+      };
+    } else {
+      return logistik;
+    }
   } catch (error) {
     throw new ResponseError(500, error.message);
   }
@@ -142,7 +213,14 @@ const getTotalLogistikKandidat = async (kandidatId) => {
 const getTotalLogistikAdmin = async (adminId) => {
   try {
     const logistik = await dashboardModel.getTotalLogistikAdmin(adminId);
-    return logistik;
+    if (logistik === undefined) {
+      return {
+        currentvalue: 0,
+        newvalue: "Kosong",
+      };
+    } else {
+      return logistik;
+    }
   } catch (error) {
     throw new ResponseError(500, error.message);
   }

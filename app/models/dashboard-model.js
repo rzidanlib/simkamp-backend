@@ -89,10 +89,15 @@ const getArusKasAdmin = async (adminId) => {
 const getTotalRelawanKandidat = async (kandidatId) => {
   const query = `
     SELECT 
-    COUNT(r.relawan_id) AS currentvalue
-    FROM relawan r
-    JOIN kandidat k ON r.relawan_kandidat_id = k.kandidat_id
+    k.kandidat_id, 
+    COUNT(r.relawan_id) AS currentValue
+    FROM 
+        relawan r
+    JOIN 
+        kandidat k ON r.relawan_kandidat_id = k.kandidat_id
     WHERE k.kandidat_id = $1
+    GROUP BY 
+        k.kandidat_id;
   `;
   const values = [kandidatId];
 
@@ -108,11 +113,17 @@ const getTotalRelawanKandidat = async (kandidatId) => {
 const getTotalRelawanAdmin = async (adminId) => {
   const query = `
     SELECT 
-    COUNT(r.relawan_id) AS currentvalue
-    FROM relawan r
-    JOIN kandidat k ON r.relawan_kandidat_id = k.kandidat_id
-    JOIN users u ON k.kandidat_admin_id = u.user_id
+    u.user_id, 
+    COUNT(r.relawan_id) AS currentValue
+    FROM 
+        relawan r
+    JOIN 
+        kandidat k ON r.relawan_kandidat_id = k.kandidat_id
+    JOIN 
+        users u ON k.kandidat_admin_id = u.user_id
     WHERE u.user_id = $1
+    GROUP BY 
+        u.user_id;
   `;
   const values = [adminId];
 
@@ -440,6 +451,50 @@ const getTotalLogistikAdmin = async (adminId) => {
     return rows[0];
   } catch (error) {
     console.error("Error fetching logistik admin:", error);
+    throw error;
+  }
+};
+
+// Daashboard Administrator Data
+const getTotalUsers = async () => {
+  const query = `
+    SELECT COUNT(user_id) AS currentValue FROM users WHERE user_partai_id IS NOT NULL;
+  `;
+
+  try {
+    const { rows } = await db.query(query);
+    return rows[0];
+  }
+  catch (error) {
+    console.error("Error fetching total users:", error);
+    throw error;
+  }
+}
+
+const getTotalKandidat = async () => {
+  const query = `
+    SELECT COUNT(kandidat_id) AS currentValue FROM kandidat;
+  `;
+
+  try {
+    const { rows } = await db.query(query);
+    return rows[0];
+  }
+  catch (error) {
+    console.error("Error fetching total kandidat:", error);
+    throw error;
+  }
+}
+
+const getTotalRelawan = async () => {
+  const query = `
+    SELECT COUNT(relawan_id) AS currentValue FROM relawan;
+  `;
+  try {
+    const { rows } = await db.query(query);
+    return rows[0];
+  } catch (error) {
+    console.error("Error fetching total relawan:", error);
     throw error;
   }
 };
