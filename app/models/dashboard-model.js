@@ -474,8 +474,12 @@ const getTotalUsers = async () => {
 
 const getUsers = async () => {
   const query = `
-  SELECT * 
-  FROM users
+  SELECT 
+    u.user_nama as name,
+    u.user_email as email,
+    p.partai_label as partai
+  FROM users u
+  JOIN partai p ON u.user_partai_id = p.partai_id
   WHERE user_partai_id IS NOT NULL
   ORDER BY user_id DESC
   LIMIT 5;
@@ -506,8 +510,12 @@ const getTotalKandidat = async () => {
 
 const getKandidat = async () => {
   const query = `
-  SELECT * 
-  FROM kandidat
+  SELECT
+    k.kandidat_foto as img,
+    k.kandidat_nama as name,
+    jp.jenis_pemilihan as status
+  FROM kandidat k
+  JOIN jenis_pemilihan jp ON k.kandidat_jenis_pemilihan_id = jp.jenis_pemilihan_id
   ORDER BY kandidat_id DESC
   LIMIT 5;
   `;
@@ -536,7 +544,10 @@ const getTotalRelawan = async () => {
 
 const getRelawan = async () => {
   const query = `
-  SELECT * 
+  SELECT 
+    relawan_foto as img,
+    relawan_nama as name,
+    relawan_status as status
   FROM relawan
   ORDER BY relawan_id DESC
   LIMIT 5;
