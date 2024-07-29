@@ -18,6 +18,7 @@ import arusKasController from "../../controllers/arus-kas-controller.js";
 import logistikController from "../../controllers/logistik-controller.js";
 import pemakaianLogistikController from "../../controllers/pemakaian-logistik-controller.js";
 import quickCountController from "../../controllers/quick-count-controller.js";
+import dashboardController from "../../controllers/dashboard-controller.js";
 
 const adminRoutes = new express.Router();
 adminRoutes.use(authMiddleware);
@@ -141,5 +142,8 @@ adminRoutes.get(
   "/quick-count/get-by-admin/:id?",
   quickCountController.getByAdminId
 );
+
+// Dashboard Administrator Routes
+adminRoutes.get("/dashboard/get", dashboardController.getDashboardAdmin);
 
 export { adminRoutes };

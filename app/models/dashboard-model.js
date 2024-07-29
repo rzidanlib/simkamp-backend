@@ -36,7 +36,7 @@ const getArusKasKandidat = async (kandidatId) => {
         JOIN relawan rk ON ak.aruskas_relawan_id = rk.relawan_id
         JOIN kandidat kk ON rk.relawan_kandidat_id = kk.kandidat_id
         WHERE kk.kandidat_id = $1
-        ORDER BY ak.aruskas_id DESC 
+        ORDER BY ak.aruskas_id DESC a
         LIMIT 1) AS newValue
     FROM arus_kas a
     JOIN relawan r ON a.aruskas_relawan_id = r.relawan_id
@@ -358,6 +358,8 @@ const getPemilihAdmin = async (adminId) => {
   }
 };
 
+// Logistik
+
 const getTotalLogistikRelawan = async (relawanId) => {
   const query = `
   SELECT 
@@ -464,12 +466,29 @@ const getTotalUsers = async () => {
   try {
     const { rows } = await db.query(query);
     return rows[0];
-  }
-  catch (error) {
+  } catch (error) {
     console.error("Error fetching total users:", error);
     throw error;
   }
-}
+};
+
+const getUsers = async () => {
+  const query = `
+  SELECT * 
+  FROM users
+  WHERE user_partai_id IS NOT NULL
+  ORDER BY user_id DESC
+  LIMIT 5;
+  `;
+
+  try {
+    const { rows } = await db.query(query);
+    return rows;
+  } catch (error) {
+    console.error("Error fetching all users:", error);
+    throw error;
+  }
+};
 
 const getTotalKandidat = async () => {
   const query = `
@@ -479,12 +498,28 @@ const getTotalKandidat = async () => {
   try {
     const { rows } = await db.query(query);
     return rows[0];
-  }
-  catch (error) {
+  } catch (error) {
     console.error("Error fetching total kandidat:", error);
     throw error;
   }
-}
+};
+
+const getKandidat = async () => {
+  const query = `
+  SELECT * 
+  FROM kandidat
+  ORDER BY kandidat_id DESC
+  LIMIT 5;
+  `;
+
+  try {
+    const { rows } = await db.query(query);
+    return rows;
+  } catch (error) {
+    console.error("Error fetching all kandidat:", error);
+    throw error;
+  }
+};
 
 const getTotalRelawan = async () => {
   const query = `
@@ -495,6 +530,23 @@ const getTotalRelawan = async () => {
     return rows[0];
   } catch (error) {
     console.error("Error fetching total relawan:", error);
+    throw error;
+  }
+};
+
+const getRelawan = async () => {
+  const query = `
+  SELECT * 
+  FROM relawan
+  ORDER BY relawan_id DESC
+  LIMIT 5;
+  `;
+
+  try {
+    const { rows } = await db.query(query);
+    return rows;
+  } catch (error) {
+    console.error("Error fetching all relawan:", error);
     throw error;
   }
 };
@@ -516,4 +568,10 @@ export default {
   getTotalLogistikRelawan,
   getTotalLogistikKandidat,
   getTotalLogistikAdmin,
+  getTotalUsers,
+  getUsers,
+  getTotalKandidat,
+  getKandidat,
+  getTotalRelawan,
+  getRelawan,
 };

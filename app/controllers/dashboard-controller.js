@@ -218,6 +218,31 @@ const getTotalLogistikAdmin = async (req, res, next) => {
   }
 };
 
+const getDashboardAdmin = async (req, res, next) => {
+  try {
+    const users = await dashboardService.getUsers();
+    const totalUsers = await dashboardService.getTotalUsers();
+    const kandidat = await dashboardService.getKandidat();
+    const totalKandidat = await dashboardService.getTotalKandidat();
+    const relawan = await dashboardService.getRelawan();
+    const totalRelawan = await dashboardService.getTotalRelawan();
+
+    res.status(200).json({
+      message: "Berhasil mendapatkan data dashboard admin",
+      data: {
+        users,
+        totalUsers,
+        kandidat,
+        totalKandidat,
+        relawan,
+        totalRelawan,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export default {
   getArusKasRelawan,
   getArusKasKandidat,
@@ -235,4 +260,5 @@ export default {
   getTotalLogistikRelawan,
   getTotalLogistikKandidat,
   getTotalLogistikAdmin,
+  getDashboardAdmin,
 };

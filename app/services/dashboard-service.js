@@ -226,6 +226,79 @@ const getTotalLogistikAdmin = async (adminId) => {
   }
 };
 
+// Dashboard Administrator
+const getTotalUsers = async () => {
+  try {
+    const users = await dashboardModel.getTotalUsers();
+    if (users === undefined) {
+      return {
+        currentvalue: 0,
+      };
+    } else {
+      return users;
+    }
+  } catch {
+    throw new ResponseError(500, error.message);
+  }
+};
+
+const getUsers = async () => {
+  try {
+    const users = await dashboardModel.getUsers();
+    return users;
+  } catch {
+    throw new ResponseError(500, error.message);
+  }
+};
+
+const getTotalKandidat = async () => {
+  try {
+    const kandidat = await dashboardModel.getTotalKandidat();
+    if (kandidat === undefined) {
+      return {
+        currentValue: 0,
+      };
+    } else {
+      return kandidat;
+    }
+  } catch (error) {
+    throw new ResponseError(500, error.message);
+  }
+};
+
+const getKandidat = async (adminId) => {
+  try {
+    const kandidat = await dashboardModel.getKandidat(adminId);
+    return kandidat;
+  } catch (error) {
+    throw new ResponseError(500, error.message);
+  }
+};
+
+const getTotalRelawan = async () => {
+  try {
+    const relawan = await dashboardModel.getTotalRelawan();
+    if (relawan === undefined) {
+      return {
+        currentValue: 0,
+      };
+    } else {
+      return relawan;
+    }
+  } catch (error) {
+    throw new ResponseError(500, error.message);
+  }
+};
+
+const getRelawan = async (adminId) => {
+  try {
+    const relawan = await dashboardModel.getRelawan(adminId);
+    return relawan;
+  } catch (error) {
+    throw new ResponseError(500, error.message);
+  }
+};
+
 export default {
   getArusKasRelawan,
   getArusKasKandidat,
@@ -243,4 +316,10 @@ export default {
   getTotalLogistikRelawan,
   getTotalLogistikKandidat,
   getTotalLogistikAdmin,
+  getTotalUsers,
+  getUsers,
+  getTotalKandidat,
+  getKandidat,
+  getTotalRelawan,
+  getRelawan,
 };
