@@ -23,7 +23,7 @@ dotenv.config();
 export const app = express();
 export const __dirname = path.resolve();
 
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors({ origin: "https://simkamp.vercel.app", credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
