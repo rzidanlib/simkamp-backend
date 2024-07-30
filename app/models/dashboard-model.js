@@ -36,7 +36,7 @@ const getArusKasKandidat = async (kandidatId) => {
         JOIN relawan rk ON ak.aruskas_relawan_id = rk.relawan_id
         JOIN kandidat kk ON rk.relawan_kandidat_id = kk.kandidat_id
         WHERE kk.kandidat_id = $1
-        ORDER BY ak.aruskas_id DESC a
+        ORDER BY ak.aruskas_id DESC
         LIMIT 1) AS newValue
     FROM arus_kas a
     JOIN relawan r ON a.aruskas_relawan_id = r.relawan_id
