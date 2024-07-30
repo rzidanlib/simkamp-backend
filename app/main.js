@@ -23,13 +23,18 @@ dotenv.config();
 export const app = express();
 export const __dirname = path.resolve();
 
-const corsOptions = {
-  origin: ["https://simkamp.vercel.app", "https://simkamp.duckdns.org"], // Add all allowed origins here
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-};
+// const corsOptions = {
+//   origin: [
+//     "https://simkamp.vercel.app",
+//     "https://simkamp.duckdns.org",
+//     "http://localhost:3000",
+//   ], // Add all allowed origins here
+//   methods: ["GET", "POST", "PUT", "DELETE"],
+//   allowedHeaders: ["Content-Type", "Authorization"],
+//   credentials: true,
+// };
 
-app.use(cors(corsOptions));
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
