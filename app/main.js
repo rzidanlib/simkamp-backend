@@ -23,7 +23,13 @@ dotenv.config();
 export const app = express();
 export const __dirname = path.resolve();
 
-app.use(cors({ origin: "https://simkamp.vercel.app", credentials: true }));
+const corsOptions = {
+  origin: "https://simkamp.vercel.app", // Ganti dengan domain yang sesuai
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
