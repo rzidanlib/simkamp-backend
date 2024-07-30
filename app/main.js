@@ -24,7 +24,7 @@ export const app = express();
 export const __dirname = path.resolve();
 
 const corsOptions = {
-  origin: "https://simkamp.vercel.app", // Ganti dengan domain yang sesuai
+  origin: ["https://simkamp.vercel.app", "https://simkamp.duckdns.org"], // Add all allowed origins here
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
 };
