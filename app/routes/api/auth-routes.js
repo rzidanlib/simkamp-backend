@@ -5,7 +5,7 @@ import { authMiddleware } from "../../middleware/auth-middleware.js";
 const authRouter = new express.Router();
 authRouter.use(authMiddleware);
 
-authRouter.post("/auth/logout", authController.logout);
-authRouter.get("/auth/get-current", authController.getCurrent);
+authRouter.post("/logout", authController.logout);
+authRouter.get("/get-current", authController.getCurrent);
 
 export { authRouter };

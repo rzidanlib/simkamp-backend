@@ -1,7 +1,8 @@
-import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import path from "path";
+import config from "./config/config.js";
+import cookieParser from "cookie-parser";
 
 import checkDatabaseConnection from "./middleware/checkDB-middleware.js";
 import { errorMiddleware } from "./middleware/error-middleware.js";
@@ -20,11 +21,10 @@ import { pemakaianLogistikRoutes } from "./routes/api/pemakaian-logistik-routes.
 import { quickCountRoutes } from "./routes/api/quick-count-routes.js";
 import { dashboarRoutes } from "./routes/api/dashboard-routes.js";
 
-dotenv.config({ path: `${process.cwd()}/.env.development` });
-
 export const app = express();
 export const __dirname = path.resolve();
 
+app.use(cookieParser());
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -33,26 +33,28 @@ app.use(express.static(path.join(__dirname, "public")));
 // Middleware
 app.use(checkDatabaseConnection);
 
+const baseAPI = "/api/v1";
+
 // Public Route
-app.use("/api/v1/", publicAPI);
-app.use("/api/v1/", miscRouter);
+app.use(baseAPI, publicAPI);
+app.use(baseAPI, miscRouter);
 
 // Protected Route
-app.use("/api/v1/", adminRoutes);
-app.use("/api/v1/", adminPartaiRoutes);
+app.use(baseAPI, adminRoutes);
+app.use(baseAPI, adminPartaiRoutes);
 
-app.use("/api/v1/", relawanRoutes);
-app.use("/api/v1/", calonPemilihRoutes);
-app.use("/api/v1/", arusKasRoutes);
-app.use("/api/v1/", logistikRoutes);
-app.use("/api/v1/", pemakaianLogistikRoutes);
-app.use("/api/v1/", quickCountRoutes);
-app.use("/api/v1/", dashboarRoutes);
-app.use("/api/v1/", authRouter);
+app.use(baseAPI, relawanRoutes);
+app.use(baseAPI, calonPemilihRoutes);
+app.use(baseAPI, arusKasRoutes);
+app.use(baseAPI, logistikRoutes);
+app.use(baseAPI, pemakaianLogistikRoutes);
+app.use(baseAPI, quickCountRoutes);
+app.use(baseAPI, dashboarRoutes);
+app.use(baseAPI, authRouter);
 
 app.use(errorMiddleware);
 
-export const PORT = process.env.APP_PORT || 8081;
+const PORT = config.port || 8081;
 
 app.listen(PORT, () => {
   console.log("Server running on", PORT);

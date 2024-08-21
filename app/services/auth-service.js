@@ -1,70 +1,66 @@
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
-import config from "../config/config.js";
 
-import authModel from "../models/auth-model.js";
 import rolesModel from "../models/admin/roles-model.js";
+import userModel from "../models/admin/user-model.js";
 
 import { ResponseError } from "../error/response-error.js";
-import { loginValidation } from "../validations/auth-validations.js";
+import {
+  loginValidation,
+  registerValidation,
+} from "../validations/auth-validations.js";
 import { validate } from "../validations/validation.js";
+import { generateToken } from "../utils/generateToken.js";
 
-// Constants
-const env = process.env.NODE_ENV;
-const JWT_SECRET = config[env].secretKey;
-const TOKEN_EXPIRATION_SECONDS = 86400; // 24 hours
+const register = async (request) => {
+  const user = validate(registerValidation, request);
+  const role = await rolesModel.getRole({ roleName: user.role });
 
-function generateToken(user, role) {
-  return jwt.sign({ id: user.id, role: role.role_name }, JWT_SECRET, {
-    algorithm: "HS256",
-    allowInsecureKeySizes: true,
-    expiresIn: TOKEN_EXPIRATION_SECONDS,
-  });
-}
-
-const validateLoginRequest = async (request) => {
-  const validatedUser = validate(loginValidation, request);
-  const isRoleExist = await rolesModel.getRole({ roleId: validatedUser.role });
-
-  if (!isRoleExist) {
-    throw new ResponseError(401, "Role tidak ada");
+  const isUsernameExist = await userModel.getByUsername(user.username);
+  if (isUsernameExist) {
+    throw new ResponseError(400, "User already exists");
   }
 
-  const user = await authModel.getUser(validatedUser.email);
-  if (!user) {
-    throw new ResponseError(
-      401,
-      `User dengan email ${validatedUser.email} tidak ditemukan.`
-    );
+  const isEmailExist = await userModel.getByEmail(user.email);
+  if (isEmailExist) {
+    throw new ResponseError(400, "Email already exists");
   }
 
-  return { user, validatedUser, isRoleExist };
+  user.password = await bcrypt.hash(user.password, 10);
+  user.role = role.id;
+
+  const newUser = await userModel.create(user);
+
+  return { user: newUser };
 };
 
 const login = async (request) => {
-  const {
-    user,
-    validatedUser,
-    isRoleExist: role,
-  } = await validateLoginRequest(request);
+  const userLogin = validate(loginValidation, request);
+
+  const user = await authModel.getUser(userLogin.email);
+  if (!user) {
+    throw new ResponseError(
+      401,
+      `User dengan email ${userLogin.email} tidak ditemukan.`
+    );
+  }
 
   const isPasswordValid = await bcrypt.compare(
-    validatedUser.password,
+    userLogin.password,
     user.password
   );
   if (!isPasswordValid) {
     throw new ResponseError(401, "Password yang dimasukan salah");
   }
 
-  const token = generateToken(user, role);
+  const token = generateToken(user);
 
   return {
     user: {
       id: user.id,
       email: user.email,
-      role: role.role_name,
+      role: user.role,
     },
-    accessToken: token,
+    token,
   };
 };
 
@@ -77,8 +73,10 @@ const logout = async (token, expiry) => {
   }
 };
 
-const getCurrent = async (authData) => {
-  const user = await authModel.getUser(authData.id);
+const getCurrent = async (userId) => {
+  const user = await authModel.getUser(userId);
+  const role = await rolesModel.getRole(user.role_id);
+
   if (!user) {
     throw new ResponseError(404, "User not found");
   }
@@ -90,4 +88,4 @@ const getCurrent = async (authData) => {
   };
 };
 
-export default { login, logout, getCurrent };
+export default { login, logout, register, getCurrent };

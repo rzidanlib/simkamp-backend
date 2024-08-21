@@ -1,15 +1,31 @@
 import { ResponseError } from "../error/response-error.js";
 import authService from "../services/auth-service.js";
 
-const login = async (req, res, next) => {
+const register = async (req, res, next) => {
+  const user = await authService.register(req.body);
   try {
-    const result = await authService.login(req.body);
-    if (!result) {
-      throw new ResponseError(401, "Login gagal");
-    }
+    res.status(201).json({ message: "User berhasil didaftarkan", data: user });
+  } catch (error) {
+    next(error);
+  }
+};
 
+const maxAge = 24 * 60 * 60 * 1000; // 1 hari dalam milidetik
+const expirationDate = new Date(Date.now() + maxAge);
+
+const login = async (req, res, next) => {
+  const result = await authService.login(req.body);
+
+  try {
+    res.cookie("auth_token", result.token, {
+      httpOnly: true,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+      expires: expirationDate,
+    });
     res.status(200).json({
-      message: "Login berhasil",
+      status: "success",
+      message: "Login success",
       data: result,
     });
   } catch (error) {
@@ -19,23 +35,17 @@ const login = async (req, res, next) => {
 
 const logout = async (req, res, next) => {
   try {
-    const token = req.get("Authorization").split(" ")[1];
-    const expiry = new Date(Date.now() + 15 * 60 * 1000);
-    const blacklistToken = await authService.logout(token, expiry);
-
-    res.status(200).json({ message: "Logout berhasil", blacklistToken });
+    res.clearCookie("auth_token");
+    res.status(200).json({ message: "Logout berhasil" });
   } catch (error) {
     next(error);
   }
 };
 
 const getCurrent = async (req, res, next) => {
+  const user = await authService.getCurrent(req.userId);
+
   try {
-    const authData = {
-      id: req.userId,
-      role: req.userRole,
-    };
-    const user = await authService.getCurrent(authData);
     res
       .status(200)
       .json({ message: "Berhasil mendapatkan user saat ini", data: user });
@@ -44,4 +54,4 @@ const getCurrent = async (req, res, next) => {
   }
 };
 
-export default { login, logout, getCurrent };
+export default { login, logout, register, getCurrent };

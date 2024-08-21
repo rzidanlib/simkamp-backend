@@ -3,15 +3,16 @@ import { ResponseError } from "../../error/response-error.js";
 
 const create = async (data) => {
   const query = `
-    INSERT INTO roles (role, description, role_name)
+    INSERT INTO roles (role, role_name)
     VALUES ($1, $2)
     RETURNING *;
   `;
-  const result = await db.query(query, [data.role, data.role_deskripsi]);
-  return result.rows[0];
+  const [role] = await db.query(query, [data.role, data.role_deskripsi]);
+  return role;
 };
 
-const getRole = async ({ roleId, roleName }) => {
+const getRole = async (roleBy = {}) => {
+  const { roleId, roleName } = roleBy;
   let query = `
     SELECT * FROM roles
     WHERE
@@ -22,7 +23,7 @@ const getRole = async ({ roleId, roleName }) => {
     query += `id = $1`;
     queryParams.push(roleId);
   } else if (roleName) {
-    query += `role_name = $1`;
+    query += `role = $1`;
     queryParams.push(roleName);
   } else {
     throw new Error("Role id atau role name harus tersedia");

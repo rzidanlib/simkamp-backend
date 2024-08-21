@@ -1,31 +1,17 @@
 import dotenv from "dotenv";
-dotenv.config({ path: `${process.cwd()}/.env.development` });
+dotenv.config();
 
 const config = {
-  development: {
-    // DB CONFIG
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    dialect: "postgres",
+  port: process.env.APP_PORT,
+  secretKey: process.env.JWT_SECRET,
 
-    // JWT Config
-    secretKey: process.env.JWT_SECRET,
-  },
-  production: {
-    // DB CONFIG
-    username: process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    dialect: "postgres",
-
-    // JWT Config
-    secretKey: process.env.JWT_SECRET,
-  },
+  // DB CONFIG
+  db_username: process.env.DB_USERNAME,
+  db_password: process.env.DB_PASSWORD,
+  db_name: process.env.DB_NAME,
+  db_host: process.env.DB_HOST,
+  db_port: process.env.DB_PORT,
+  db_dialect: "postgres",
 };
 
 export default config;

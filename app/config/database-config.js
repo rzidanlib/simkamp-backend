@@ -3,15 +3,12 @@ import config from "./config.js";
 
 const { Pool } = pg;
 
-const env = process.env.NODE_ENV || "development";
-const dbConfig = config[env];
-
 const db = new Pool({
-  user: dbConfig.username,
-  password: dbConfig.password,
-  host: dbConfig.host,
-  port: dbConfig.port,
-  database: dbConfig.database,
+  user: config.db_username,
+  password: config.db_password,
+  host: config.db_host,
+  port: config.db_port,
+  database: config.db_name,
 });
 
 export default db;
