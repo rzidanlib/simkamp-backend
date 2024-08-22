@@ -34,18 +34,18 @@ const register = async (request) => {
 };
 
 const login = async (request) => {
-  const userLogin = validate(loginValidation, request);
+  const validateUser = validate(loginValidation, request);
 
-  const user = await authModel.getUser(userLogin.email);
+  const user = await userModel.getByEmail(validateUser.email);
   if (!user) {
     throw new ResponseError(
       401,
-      `User dengan email ${userLogin.email} tidak ditemukan.`
+      `User dengan email ${validateUser.email} tidak ditemukan.`
     );
   }
 
   const isPasswordValid = await bcrypt.compare(
-    userLogin.password,
+    validateUser.password,
     user.password
   );
   if (!isPasswordValid) {
@@ -73,9 +73,9 @@ const logout = async (token, expiry) => {
   }
 };
 
-const getCurrent = async (userId) => {
-  const user = await authModel.getUser(userId);
-  const role = await rolesModel.getRole(user.role_id);
+const getCurrentUser = async (userId) => {
+  const user = await userModel.getById(userId);
+  const role = await rolesModel.getRole({ roleId: user.role_id });
 
   if (!user) {
     throw new ResponseError(404, "User not found");
@@ -83,9 +83,10 @@ const getCurrent = async (userId) => {
 
   return {
     id: user.id,
+    username: user.username,
     email: user.email,
-    role: authData.role,
+    role: role.role_name,
   };
 };
 
-export default { login, logout, register, getCurrent };
+export default { login, logout, register, getCurrentUser };

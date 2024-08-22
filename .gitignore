@@ -6,3 +6,4 @@ package-lock.json
 *.gz
 .env.development
 .env.production
+.env

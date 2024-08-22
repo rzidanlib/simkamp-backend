@@ -1,4 +1,3 @@
-import { ResponseError } from "../error/response-error.js";
 import authService from "../services/auth-service.js";
 
 const register = async (req, res, next) => {
@@ -42,16 +41,18 @@ const logout = async (req, res, next) => {
   }
 };
 
-const getCurrent = async (req, res, next) => {
-  const user = await authService.getCurrent(req.userId);
+const getCurrentUser = async (req, res, next) => {
+  const user = await authService.getCurrentUser(req.userId);
 
   try {
-    res
-      .status(200)
-      .json({ message: "Berhasil mendapatkan user saat ini", data: user });
+    res.status(200).json({
+      status: "success",
+      message: "Berhasil mendapatkan user saat ini",
+      data: user,
+    });
   } catch (error) {
     next(error);
   }
 };
 
-export default { login, logout, register, getCurrent };
+export default { login, logout, register, getCurrentUser };
